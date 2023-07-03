@@ -23,7 +23,7 @@ function DetailScreen({ route, navigation }) {
                 </View>
                     
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button} onPress={() => {}} >
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AR')} >
                         <MaterialCommunityIcons name="rotate-3d" size={24} style={styles.camera} />
                         <Text style={styles.buttonText}>View in AR</Text>
                     </TouchableOpacity>
