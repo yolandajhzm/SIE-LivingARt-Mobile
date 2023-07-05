@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/stack": "^6.3.17",
+    "@viro-community/react-viro": "^2.23.0",
     "create-react-class": "^15.7.0",
     "deprecated-react-native-prop-types": "^4.1.0",
     "patch-package": "^7.0.0",

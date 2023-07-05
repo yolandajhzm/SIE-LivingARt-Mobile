@@ -17,13 +17,13 @@ const NavigationContainer = () => {
     <ReactNavigationContainer>
       <Stack.Navigator>
         {/* <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/> */}
-      
+
         <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
-        <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }}/>
-        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/>
-        <Stack.Screen name="Account" component={AccountScreen} options={{ headerShown: false }}/>
-        <Stack.Screen name="Detail" component={DetailScreen} options={{ headerShown: false }}/> 
+        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Account" component={AccountScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Detail" component={DetailScreen} options={{ headerShown: false }} />
         <Stack.Screen name="AR" component={ARScreen} />
       </Stack.Navigator>
     </ReactNavigationContainer>
