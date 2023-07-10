@@ -35,6 +35,12 @@ const InitialScene = props => {
     }
   };
 
+  function _onRotate(rotateState, rotationFactor, source) {
+    if (rotateState == 3) {
+      setRotation(prevRotation => prevRotation + rotationFactor);
+    }
+  }
+
   let data = props.sceneNavigator.viroAppProps;
 
   return (
@@ -59,6 +65,7 @@ const InitialScene = props => {
               require('../assets/model3D/whiteChair/unrawpText.JPG'),
             ]}
             type="OBJ"
+            onRotate={_onRotate}
           />
         </ViroNode>
       ) : (
@@ -68,19 +75,6 @@ const InitialScene = props => {
           position={[0, 0, -1]}
         />
       )}
-
-      <ViroText
-        text={`Rotation: ${rotation}`}
-        scale={[0.5, 0.5, 0.5]}
-        position={[0, 0, -2]}
-      />
-
-      <ViroText
-        text="Rotate"
-        scale={[0.5, 0.5, 0.5]}
-        position={[0, 0, -3]}
-        onClick={rotateObject}
-      />
     </ViroARScene>
   );
 };
@@ -119,5 +113,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 });
+
+
 
 export default ARScreen;
