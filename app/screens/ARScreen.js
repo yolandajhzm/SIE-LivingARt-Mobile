@@ -1,5 +1,5 @@
-import React, {useState, useRef} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import {
   ViroARScene,
   ViroText,
@@ -9,7 +9,7 @@ import {
   ViroMaterials,
   ViroNode,
 } from '@viro-community/react-viro';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const InitialScene = props => {
   const [rotation, setRotation] = useState(0);
@@ -36,8 +36,9 @@ const InitialScene = props => {
   };
 
   function _onRotate(rotateState, rotationFactor, source) {
-    if (rotateState == 3) {
-      setRotation(prevRotation => prevRotation + rotationFactor);
+    const scale = 0.1;
+    if (rotateState == 2) {
+      setRotation(prevRotation => prevRotation + rotationFactor * scale);
     }
   }
 
@@ -79,15 +80,15 @@ const InitialScene = props => {
   );
 };
 
-function ARScreen({navigation}) {
+function ARScreen({ navigation }) {
   const [flag, setFlag] = useState('Hello World');
 
   return (
     <View style={styles.container}>
       <ViroARSceneNavigator
-        initialScene={{scene: InitialScene}}
-        viroAppProps={{flag: flag}}
-        style={{flex: 1}}
+        initialScene={{ scene: InitialScene }}
+        viroAppProps={{ flag: flag }}
+        style={{ flex: 1 }}
       />
 
       <View style={styles.controlsView}>
