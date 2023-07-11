@@ -14,30 +14,11 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 const InitialScene = props => {
   const [rotation, setRotation] = useState(0);
   const objectRef = useRef(null);
-  const [dragging, setDragging] = useState(false);
-  const [objectPosition, setObjectPosition] = useState([0, -5, -5]); // Adjusted initial position
-
-  const rotateObject = () => {
-    setRotation(prevRotation => prevRotation + 1); // Increase rotation angle by 1 degree
-  };
-
-  const onDragStart = () => {
-    setDragging(true);
-  };
-
-  const onDragEnd = () => {
-    setDragging(false);
-  };
-
-  const onDrag = (dragToPos, source) => {
-    if (dragging) {
-      setObjectPosition([dragToPos[0], dragToPos[1] - 0.5, dragToPos[2]]); // Adjust object position based on drag gesture
-    }
-  };
 
   function _onRotate(rotateState, rotationFactor, source) {
-    if (rotateState == 3) {
-      setRotation(prevRotation => prevRotation + rotationFactor);
+    const scale = 0.1;
+    if (rotateState == 2) {
+      setRotation(prevRotation => prevRotation + rotationFactor * scale);
     }
   }
 
@@ -49,15 +30,14 @@ const InitialScene = props => {
 
       {data.flag === 'show' ? (
         <ViroNode
-          position={objectPosition}
+          position={[0, -5, -5]}
           rotation={[0, rotation, 0]}
-          onDrag={onDrag}
-          onDragStart={onDragStart}
-          onDragEnd={onDragEnd}
-          dragType="FixedDistance"
+          dragType={'FixedToWorld'}
+          onDrag={() => {}}
           ref={objectRef}>
           <Viro3DObject
             source={require('../assets/model3D/whiteChair/modern_chair11obj.obj')}
+            position={[0, -5.1, -5]}
             scale={[0.05, 0.05, 0.05]}
             resources={[
               require('../assets/model3D/whiteChair/modern_chair11obj.mtl'),
@@ -113,7 +93,5 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 });
-
-
 
 export default ARScreen;
