@@ -19,7 +19,7 @@ function DetailScreen({ route, navigation }) {
                 </View>
                 <View style={styles.detailContainer}>
                     <Text style={styles.name}>{name}</Text>
-                    <Text style={styles.description}>{description}</Text>
+                    <Text style={styles.description} numberOfLines={5} ellipsizeMode="tail">{description}</Text>
                 </View>
                     
                 <View style={styles.buttonContainer}>
@@ -89,8 +89,9 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontFamily: 'Avenir',
         color: colors.gray,
-        position: 'absolute',
-        bottom: "50%",
+        width: '80%',
+        marginTop: 10,
+        textAlign: 'center',
     },
     name: {
         fontSize: 25,

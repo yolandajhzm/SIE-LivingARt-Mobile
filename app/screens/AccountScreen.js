@@ -12,14 +12,7 @@ import colors from '../config/colors';
 function AccountScreen({ navigation }) {
 
     const handleSignOut = () => {
-        // const responseData = callApi('API_URL', 'PUT', { })
-
-        // TODO: handle response
-        if (true) {
-            navigation.navigate('Welcome');
-        } else {
-            alert('Sign out failed');
-        }
+        navigation.navigate('Welcome');
     };
 
     {/* Nav Bar */}

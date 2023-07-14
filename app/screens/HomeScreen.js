@@ -96,7 +96,7 @@ function HomeScreen({ navigation }) {
             name: 'Chair 1',
             type: 'chair',
             imageSource: require('../assets/chair.png'),
-            description: 'This is a chair',
+            description: 'This is a chair This is a chair This is a chair This is a chair This is a chair This is a chair This is a chair This is a chair This is a chair',
         },
         {
             id: 2,
@@ -131,7 +131,7 @@ function HomeScreen({ navigation }) {
         setAllData(dummyData);
 
         for(let i = 0; i < dummyData.length; i++) {
-            switch(dummyData[i].type) {
+            switch(allData[i].type) {
                 case 'chair':
                     chairData.push(dummyData[i]);
                     break;

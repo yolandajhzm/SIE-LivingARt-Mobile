@@ -14,7 +14,7 @@ function LoginScreen ({ navigation }) {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
   
-    const handleLogin = () => {
+    const handleLogin = async() => {
         if (!email) {
             alert('Please fill Email');
             return;
@@ -24,14 +24,24 @@ function LoginScreen ({ navigation }) {
             return;
         }
         // login user
-        // const responseData = callApi('API_URL', 'PUT', { email, password })
+        const responseData = await callApi('http://localhost:88/api/user/info/login', 'PUT', { 
+            email: email,
+            password: password,
+        })
 
-        // TODO: handle response
-        if (true) {
-            navigation.navigate('Home');
-        } else {
-            alert('Login failed');
-        }
+        // handle response
+        setEmail('');
+        setPassword('');
+        setTimeout(() => {
+            if (responseData.code === 0) { 
+                // const userId = responseData.data.id; 
+                // console.log("id: " + userId);
+                navigation.navigate('Home');
+            } else {
+                alert(responseData.msg);
+                console.error("Login failed");
+            }
+        }, 1);
     };
 
     const handleSignUp = () => {
