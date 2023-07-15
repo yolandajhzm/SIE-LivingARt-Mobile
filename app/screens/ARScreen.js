@@ -8,8 +8,11 @@ import {
   Viro3DObject,
   ViroMaterials,
   ViroNode,
+  ViroARPlaneSelector
 } from '@viro-community/react-viro';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import HelloWorldSceneAR from './HelloWorldSceneAR';
+import ReticleSceneAR from './ReticleSceneAR';
 
 const InitialScene = props => {
   const [rotation, setRotation] = useState(0);
@@ -29,25 +32,32 @@ const InitialScene = props => {
       <ViroAmbientLight color="#ffffff" />
 
       {data.flag === 'show' ? (
-        <ViroNode
-          position={[0, -5, -5]}
-          rotation={[0, rotation, 0]}
-          dragType={'FixedToWorld'}
-          onDrag={() => {}}
-          ref={objectRef}>
+        <ViroARPlaneSelector
+          onPlaneSelected={(anchor) => { console.log(anchor) }}
+        >
           <Viro3DObject
             source={require('../assets/model3D/whiteChair/modern_chair11obj.obj')}
-            position={[0, -5.1, -5]}
-            scale={[0.05, 0.05, 0.05]}
             resources={[
               require('../assets/model3D/whiteChair/modern_chair11obj.mtl'),
               require('../assets/model3D/whiteChair/0027.JPG'),
               require('../assets/model3D/whiteChair/unrawpText.JPG'),
             ]}
+            position={[0, -2, 0]}
+            scale={[0.01, 0.01, 0.01]}
             type="OBJ"
-            onRotate={_onRotate}
+          // onRotate={_onRotate}
+          // rotation={[0, rotation, 0]}
+          // dragType={'FixedToWorld'}
+
+          // dragType="FixedToPlane"
+          // dragPlane={{
+          //   planePoint: [0, -2, 0],
+          //   planeNormal: [0, 1, 0],
+          //   maxDistance: 4
+          // }}
+          // onDrag={() => { }}
           />
-        </ViroNode>
+        </ViroARPlaneSelector>
       ) : (
         <ViroText
           text={'Object is Hidden'}
@@ -60,19 +70,19 @@ const InitialScene = props => {
 };
 
 function ARScreen({ navigation }) {
-  const [flag, setFlag] = useState('Hello World');
+  const [flag, setFlag] = useState(false);
 
   return (
     <View style={styles.container}>
       <ViroARSceneNavigator
-        initialScene={{ scene: InitialScene }}
+        initialScene={{ scene: ReticleSceneAR }}
         viroAppProps={{ flag: flag }}
         style={{ flex: 1 }}
       />
 
       <View style={styles.controlsView}>
-        <TouchableOpacity onPress={() => setFlag('show')}>
-          <Text>Show</Text>
+        <TouchableOpacity onPress={() => setFlag(!flag)}>
+          <Text style={{ fontSize: 30 }}>Reposition</Text>
         </TouchableOpacity>
       </View>
     </View>

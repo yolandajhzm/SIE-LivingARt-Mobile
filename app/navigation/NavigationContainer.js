@@ -10,6 +10,7 @@ import AccountScreen from '../screens/AccountScreen';
 import DetailScreen from '../screens/DetailScreen';
 import ARScreen from '../screens/ARScreen';
 
+
 const Stack = createStackNavigator();
 
 const NavigationContainer = () => {
