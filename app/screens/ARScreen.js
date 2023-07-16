@@ -31,33 +31,29 @@ const InitialScene = props => {
     <ViroARScene>
       <ViroAmbientLight color="#ffffff" />
 
-      {data.flag === 'show' ? (
-        <ViroARPlaneSelector
-          onPlaneSelected={(anchor) => { console.log(anchor) }}
-        >
-          <Viro3DObject
-            source={require('../assets/model3D/whiteChair/modern_chair11obj.obj')}
-            resources={[
-              require('../assets/model3D/whiteChair/modern_chair11obj.mtl'),
-              require('../assets/model3D/whiteChair/0027.JPG'),
-              require('../assets/model3D/whiteChair/unrawpText.JPG'),
-            ]}
-            position={[0, -2, 0]}
-            scale={[0.01, 0.01, 0.01]}
-            type="OBJ"
-          // onRotate={_onRotate}
-          // rotation={[0, rotation, 0]}
-          // dragType={'FixedToWorld'}
+      {data.flag === true ? (
+        <Viro3DObject
+          source={require('../assets/model3D/whiteChair/modern_chair11obj.obj')}
+          resources={[
+            require('../assets/model3D/whiteChair/modern_chair11obj.mtl'),
+            require('../assets/model3D/whiteChair/0027.JPG'),
+            require('../assets/model3D/whiteChair/unrawpText.JPG'),
+          ]}
+          position={[0, -1, -1]}
+          scale={[0.02, 0.02, 0.02]}
+          type="OBJ"
+        // onRotate={_onRotate}
+        // rotation={[0, rotation, 0]}
+        // dragType={'FixedToWorld'}
 
-          // dragType="FixedToPlane"
-          // dragPlane={{
-          //   planePoint: [0, -2, 0],
-          //   planeNormal: [0, 1, 0],
-          //   maxDistance: 4
-          // }}
-          // onDrag={() => { }}
-          />
-        </ViroARPlaneSelector>
+        // dragType="FixedToPlane"
+        // dragPlane={{
+        //   planePoint: [0, -2, 0],
+        //   planeNormal: [0, 1, 0],
+        //   maxDistance: 4
+        // }}
+        // onDrag={() => { }}
+        />
       ) : (
         <ViroText
           text={'Object is Hidden'}
@@ -76,6 +72,7 @@ function ARScreen({ navigation }) {
     <View style={styles.container}>
       <ViroARSceneNavigator
         initialScene={{ scene: ReticleSceneAR }}
+        // initialScene={{ scene: InitialScene }}
         viroAppProps={{ flag: flag }}
         style={{ flex: 1 }}
       />

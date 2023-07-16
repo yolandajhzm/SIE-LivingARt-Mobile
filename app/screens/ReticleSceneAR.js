@@ -128,10 +128,10 @@ class ReticleSceneAR extends Component {
         />
         <ViroImage rotation={[-90, 0, 0]}
           visible={this.state.foundPlane}
-          source={require('./res/tracking_diffuse_2.png')} />
+          source={require('../assets/res/tracking_diffuse_2.png')} />
         <ViroImage rotation={[-90, 0, 0]}
           visible={!this.state.foundPlane}
-          source={require('./res/tracking_diffuse.png')} />
+          source={require('../assets/res/tracking_diffuse.png')} />
       </ViroNode>
     )
   }
@@ -153,6 +153,7 @@ class ReticleSceneAR extends Component {
 
   _getModel() {
     // console.log("flag:", this.props.sceneNavigator.viroAppProps.flag);
+    // if (!this.state.isReady) return;
 
     let position = this.state.isReady ? this.state.lastFoundPlaneLocation : [0, 20, 0];
     // console.log("model position:", position);
@@ -194,7 +195,7 @@ class ReticleSceneAR extends Component {
             ]}
             visible={this.state.isReady}
             onClickState={this._onClickObject}
-            scale={[0.02, 0.02, 0.02]}
+            scale={[0.05, 0.05, 0.05]}
             type="OBJ"
           />
           {/* <ViroQuad
@@ -225,11 +226,12 @@ class ReticleSceneAR extends Component {
   _onTrackingUpdated(state, reason) {
     if (state == ViroTrackingStateConstants.TRACKING_NORMAL) {
       this.setState({
-        text: "Hello World!"
+        text: ""
       });
     } else if (state == ViroTrackingStateConstants.TRACKING_UNAVAILABLE) {
-      // Handle loss of tracking
-
+      this.setState({
+        text: "Tracking is unavailable. Try moving your camera."
+      });
     }
   }
 
@@ -251,19 +253,18 @@ class ReticleSceneAR extends Component {
           }
         }
       }
+      // else we made it here, so just forward vector with unmarked.
+      let newPosition = [results.cameraOrientation.forward[0] * 1.5, results.cameraOrientation.forward[1] * 1.5, results.cameraOrientation.forward[2] * 1.5];
+      newPosition[0] = results.cameraOrientation.position[0] + newPosition[0];
+      newPosition[1] = results.cameraOrientation.position[1] + newPosition[1];
+      newPosition[2] = results.cameraOrientation.position[2] + newPosition[2];
+      this.setState({
+        planeReticleLocation: newPosition,
+        displayHitReticle: true,
+        foundPlane: false,
+      });
       return;
     }
-
-    //else we made it here, so just forward vector with unmarked.
-    let newPosition = [results.cameraOrientation.forward[0] * 1.5, results.cameraOrientation.forward[1] * 1.5, results.cameraOrientation.forward[2] * 1.5];
-    newPosition[0] = results.cameraOrientation.position[0] + newPosition[0];
-    newPosition[1] = results.cameraOrientation.position[1] + newPosition[1];
-    newPosition[2] = results.cameraOrientation.position[2] + newPosition[2];
-    this.setState({
-      planeReticleLocation: newPosition,
-      displayHitReticle: true,
-      foundPlane: false,
-    });
     //  this.props.arSceneNavigator.viroAppProps.setIsOverPlane(false);
   }
 }
