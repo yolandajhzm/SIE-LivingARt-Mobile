@@ -8,7 +8,7 @@ import {
   Viro3DObject,
   ViroMaterials,
   ViroNode,
-  ViroARPlaneSelector
+  ViroARPlaneSelector,
 } from '@viro-community/react-viro';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import HelloWorldSceneAR from './HelloWorldSceneAR';
@@ -42,7 +42,7 @@ const InitialScene = props => {
           position={[0, -1, -1]}
           scale={[0.02, 0.02, 0.02]}
           type="OBJ"
-        // onRotate={_onRotate}
+        onRotate={_onRotate}
         // rotation={[0, rotation, 0]}
         // dragType={'FixedToWorld'}
 
