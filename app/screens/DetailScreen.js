@@ -5,12 +5,11 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import colors from '../config/colors';
 
-// TODO:
-// AR screen
+
 
 function DetailScreen({ route, navigation }) {
     const { item } = route.params;
-    const { id, name, type, imageSource, description } = item;
+    const { name, imageSource, description } = item; //TODO: add threeModels
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.itemContainer}>

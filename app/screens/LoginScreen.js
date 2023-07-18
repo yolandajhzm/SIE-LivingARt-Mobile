@@ -13,7 +13,8 @@ function LoginScreen ({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-  
+    const userId = 1;
+    
     const handleLogin = async() => {
         if (!email) {
             alert('Please fill Email');
@@ -24,24 +25,25 @@ function LoginScreen ({ navigation }) {
             return;
         }
         // login user
-        const responseData = await callApi('http://localhost:88/api/user/info/login', 'PUT', { 
-            email: email,
-            password: password,
-        })
+        // const responseData = await callApi('http://localhost:88/api/user/info/login', 'PUT', { 
+        //     email: email,
+        //     password: password,
+        // })
 
-        // handle response
-        setEmail('');
-        setPassword('');
-        setTimeout(() => {
-            if (responseData.code === 0) { 
-                // const userId = responseData.data.id; 
-                // console.log("id: " + userId);
-                navigation.navigate('Home');
-            } else {
-                alert(responseData.msg);
-                console.error("Login failed");
-            }
-        }, 1);
+        // // handle response
+        // setEmail('');
+        // setPassword('');
+        // setTimeout(() => {
+        //     if (responseData.code === 0) { 
+        //         // const userId = responseData.data.id; 
+        //         // console.log("id: " + userId);
+        //         navigation.navigate('Home', { userId });
+        //     } else {
+        //         alert(responseData.msg);
+        //         console.error("Login failed");
+        //     }
+        // }, 1);
+        navigation.navigate('Home', { userId });
     };
 
     const handleSignUp = () => {

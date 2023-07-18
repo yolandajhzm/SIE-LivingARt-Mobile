@@ -131,7 +131,7 @@ function HomeScreen({ navigation }) {
         setAllData(dummyData);
 
         for(let i = 0; i < dummyData.length; i++) {
-            switch(allData[i].type) {
+            switch(dummyData[i].type) {
                 case 'chair':
                     chairData.push(dummyData[i]);
                     break;
@@ -151,9 +151,10 @@ function HomeScreen({ navigation }) {
     }, []);
 
     // each item square
+    //source={{ uri: imageSource }}
     const renderItem = ({ item }) => (
         <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Detail', {item: item})}>
-            <Image source={ item.imageSource } style={styles.image} />
+            <Image source={ item.imageSource } style={styles.image} /> 
             <View style={styles.textContainer}>
                 <Text style={styles.title}>{item.name}</Text>
             </View>   
