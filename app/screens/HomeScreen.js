@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import{ StyleSheet, View, FlatList, Text, Image, Dimensions, TouchableOpacity, SafeAreaView } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 
 import { callApi } from '../services/api';
 import colors from '../config/colors';
-
 
 function HomeScreen({ navigation }) {
 
@@ -93,6 +93,7 @@ function HomeScreen({ navigation }) {
         const dummyData = [
         {
             id: 1,
+            wish: true,
             name: 'Chair 1',
             type: 'chair',
             imageSource: require('../assets/chair.png'),
@@ -100,6 +101,7 @@ function HomeScreen({ navigation }) {
         },
         {
             id: 2,
+            wish: false,
             name: 'Table 1',
             type: 'table',
             imageSource: require('../assets/table.png'),
@@ -107,6 +109,7 @@ function HomeScreen({ navigation }) {
         },
         {
             id: 3,
+            wish: false,
             name: 'Sofa 1',
             type: 'sofa',
             imageSource: require('../assets/sofa.png'),
@@ -114,6 +117,7 @@ function HomeScreen({ navigation }) {
         },
         {
             id: 4,
+            wish: true,
             name: 'Table 2',
             type: 'table',
             imageSource: require('../assets/table.png'),
@@ -121,6 +125,7 @@ function HomeScreen({ navigation }) {
         },
         {
             id: 5,
+            wish: false,
             name: 'Chair 2',
             type: 'chair',
             imageSource: require('../assets/chair.png'),
@@ -130,25 +135,57 @@ function HomeScreen({ navigation }) {
 
         setAllData(dummyData);
 
+        let chairItems = [];
+        let tableItems = [];
+        let sofaItems = [];
+        let lampItems = [];
+
         for(let i = 0; i < dummyData.length; i++) {
             switch(dummyData[i].type) {
                 case 'chair':
-                    chairData.push(dummyData[i]);
+                    chairItems.push(dummyData[i]);
                     break;
                 case 'table':
-                    tableData.push(dummyData[i]);
+                    tableItems.push(dummyData[i]);
                     break;
                 case 'sofa':
-                    sofaData.push(dummyData[i]);
+                    sofaItems.push(dummyData[i]);
                     break;
                 case 'lamp':
-                    lampData.push(dummyData[i]);
+                    lampItems.push(dummyData[i]);
                     break;
                 default:
                     break;
             }
         }
+
+        setChairData(chairItems);
+        setTableData(tableItems);
+        setSofaData(sofaItems);
+        setLampData(lampItems);
     }, []);
+
+    const handleWishList = (item) => {
+        const updatedItem = {  ...item, wish: !item.wish  };
+        console.log(updatedItem);
+        setAllData(allData.map((dataItem) => dataItem.id === item.id ? updatedItem : dataItem));
+        switch(item.type) {
+            case 'chair':
+                setChairData(chairData.map((dataItem) => dataItem.id === item.id ? updatedItem : dataItem));
+                break;
+            case 'table':
+                setTableData(tableData.map((dataItem) => dataItem.id === item.id ? updatedItem : dataItem));
+                break;
+            case 'sofa':
+                setSofaData(sofaData.map((dataItem) => dataItem.id === item.id ? updatedItem : dataItem));
+                break;
+            case 'lamp':
+                setLampData(lampData.map((dataItem) => dataItem.id === item.id ? updatedItem : dataItem));
+                break;
+            default:
+                break;
+        }
+    }
 
     // each item square
     //source={{ uri: imageSource }}
@@ -157,6 +194,9 @@ function HomeScreen({ navigation }) {
             <Image source={ item.imageSource } style={styles.image} /> 
             <View style={styles.textContainer}>
                 <Text style={styles.title}>{item.name}</Text>
+                <TouchableOpacity style={styles.wishListIcon} onPress={() => handleWishList(item)} > 
+                    <Entypo name= {item.wish ? "heart" : "heart-outlined"} size={17} color={item.wish ? colors.red : colors.lightgray} />
+                </TouchableOpacity>
             </View>   
         </TouchableOpacity>
     ); 
@@ -282,16 +322,26 @@ const styles = StyleSheet.create({
         flex: 0.25,
         top: 5,
         width: '100%',
+        // alignItems: 'center',
+        // justifyContent: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        justifyContent: 'center',
+        paddingLeft: '10%', 
+        paddingRight: '10%',
     },
     title: {
-        position: 'absolute',
+        // position: 'absolute',
         fontFamily: 'Avenir',
         fontWeight: 'bold',
-        left: '12%',
+        // left: '12%',
         color: colors.darkgray,
-        width: '100%',
+        // width: '100%',
+    },
+    wishListIcon: {
+        // flex: 1, 
+        alignItems: 'flex-end', 
+        // justifyContent: 'center'
     },
 })
 
