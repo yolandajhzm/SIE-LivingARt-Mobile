@@ -7,8 +7,6 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { callApi } from '../services/api';
 import colors from '../config/colors';
 
-// TODO: 
-// get info from navigation
 
 function AccountScreen({ navigation }) {
 
@@ -74,7 +72,7 @@ function AccountScreen({ navigation }) {
                         <AntDesign name="home" size={25} color={colors.lightgray}  />
                         <Text style={styles.iconName} color={colors.lightgray}>Home</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.iconContainer} onPress={() => {}} >
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Wishlist')} >
                         <Entypo name="heart-outlined" size={25} color={colors.lightgray}  />
                         <Text style={styles.iconName} color={colors.lightgray}>Wishlist</Text>
                     </TouchableOpacity>
