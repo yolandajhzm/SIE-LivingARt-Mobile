@@ -226,6 +226,10 @@ function HomeScreen({ navigation }) {
                         <AntDesign name="home" size={25} color={colors.darkgray}  />
                         <Text style={styles.iconName} color={colors.darkgray}>Home</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => {}} >
+                        <Entypo name="heart-outlined" size={25} color={colors.lightgray}  />
+                        <Text style={styles.iconName} color={colors.lightgray}>Wishlist</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Account')} > 
                         <AntDesign name="user" size={25} color={colors.lightgray} />
                         <Text style={styles.iconName} color={colors.lightgray}>Me</Text>
