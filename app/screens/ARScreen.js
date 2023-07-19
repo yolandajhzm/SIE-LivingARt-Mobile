@@ -13,6 +13,7 @@ import {
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import HelloWorldSceneAR from './HelloWorldSceneAR';
 import ReticleSceneAR from './ReticleSceneAR';
+import { MeasureSceneAR } from './MeasureSceneAR';
 
 const InitialScene = props => {
   const [rotation, setRotation] = useState(0);
@@ -42,7 +43,7 @@ const InitialScene = props => {
           position={[0, -1, -1]}
           scale={[0.02, 0.02, 0.02]}
           type="OBJ"
-        onRotate={_onRotate}
+          onRotate={_onRotate}
         // rotation={[0, rotation, 0]}
         // dragType={'FixedToWorld'}
 
@@ -71,8 +72,9 @@ function ARScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <ViroARSceneNavigator
-        initialScene={{ scene: ReticleSceneAR }}
+        // initialScene={{ scene: ReticleSceneAR }}
         // initialScene={{ scene: InitialScene }}
+        initialScene={{ scene: MeasureSceneAR }}
         viroAppProps={{ flag: flag }}
         style={{ flex: 1 }}
       />
