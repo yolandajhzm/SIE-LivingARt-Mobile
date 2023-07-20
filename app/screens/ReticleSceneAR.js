@@ -1,7 +1,7 @@
 'use strict';
-import React, {Component} from 'react';
-import {StyleSheet} from 'react-native';
-import {useEffect, useState} from 'react';
+import React, { Component } from 'react';
+import { StyleSheet } from 'react-native';
+import { useEffect, useState } from 'react';
 import {
   ViroARScene,
   ViroText,
@@ -14,7 +14,16 @@ import {
   ViroImage,
   ViroQuad,
   ViroBox,
+  ViroMaterials
 } from '@viro-community/react-viro';
+
+
+ViroMaterials.createMaterials({
+  tp: {
+    diffuseColor: 'hsla(0, 60%, 50%, 0.25)',
+  },
+});
+
 
 class ReticleSceneAR extends Component {
   constructor(props) {
@@ -34,7 +43,7 @@ class ReticleSceneAR extends Component {
       objectRotation: [0, 0, 0],
     };
 
-    console.log('!!flag:', this.state.flag);
+    // console.log('!!flag:', this.state.flag);
 
     // bind 'this' to functions
     this._onTrackingUpdated = this._onTrackingUpdated.bind(this);
@@ -44,6 +53,7 @@ class ReticleSceneAR extends Component {
     this._getModel = this._getModel.bind(this);
     this._onCameraARHitTest = this._onCameraARHitTest.bind(this);
     this._onRotateObject = this._onRotateObject.bind(this);
+    this._onClickObject = this._onClickObject.bind(this);
   }
 
   componentWillReceiveProps = props => {
@@ -175,8 +185,9 @@ class ReticleSceneAR extends Component {
         <ViroNode
           ref={ref => {
             this.node = ref;
+            // console.log("this.node", this.node)
           }}
-          // scale={[.1, .1, .1]}
+        // scale={[.1, .1, .1]}
         >
           {/* <Viro3DObject
             visible={this.state.isReady}
@@ -188,11 +199,16 @@ class ReticleSceneAR extends Component {
             ]}
             animation={{ name: "02", delay: 0, loop: true, run: true }}
             type="VRX" /> */}
-          {/* <ViroBox
+          <ViroBox
             visible={this.state.isReady}
-            position={[0, .5, 0]}
-            onClickState={this._onClickObject}>
-          </ViroBox> */}
+            position={[0, 1.55, 0]}
+            height={0.62 / 0.2}
+            length={0.43 / 0.2}
+            width={0.42 / 0.2}
+            materials={'tp'}
+            onClickState={this._onClickObject}
+          >
+          </ViroBox>
           <Viro3DObject
             source={require('../assets/model3D/whiteChair/modern_chair11obj.obj')}
             resources={[
@@ -204,7 +220,7 @@ class ReticleSceneAR extends Component {
             rotation={this.state.objectRotation}
             onClickState={this._onClickObject}
             onRotate={this._onRotateObject}
-            scale={[0.05, 0.05, 0.05]}
+            scale={[0.04, 0.04, 0.04]}
             type="OBJ"
           />
           {/* <ViroQuad
@@ -215,7 +231,7 @@ class ReticleSceneAR extends Component {
             arShadowReceiver={true}
             ignoreEventHandling={true} /> */}
         </ViroNode>
-      </ViroNode>
+      </ViroNode >
     );
   }
 
@@ -229,6 +245,18 @@ class ReticleSceneAR extends Component {
       console.log('Click Up', stateValue, position, source);
     } else if (stateValue == 3) {
       console.log('Clicked', stateValue, position, source);
+      console.log(this.node);
+      this.node.getBoundingBoxAsync().then((data) => {
+        console.log(data);
+        let d = data.boundingBox;
+        console.log("x:", d.maxX - d.minX);
+        console.log("y:", d.maxY - d.minY);
+        console.log("z:", d.maxZ - d.minZ);
+      })
+      this.node.getTransformAsync().then((transform) => {
+        console.log("pos:", transform.position);
+        console.log("scale:", transform.scale);
+      })
     }
   }
 
@@ -304,5 +332,6 @@ let styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
 
 export default ReticleSceneAR;

@@ -72,9 +72,9 @@ function ARScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <ViroARSceneNavigator
-        // initialScene={{ scene: ReticleSceneAR }}
+        initialScene={{ scene: ReticleSceneAR }}
         // initialScene={{ scene: InitialScene }}
-        initialScene={{ scene: MeasureSceneAR }}
+        // initialScene={{ scene: MeasureSceneAR }}
         viroAppProps={{ flag: flag }}
         style={{ flex: 1 }}
       />
