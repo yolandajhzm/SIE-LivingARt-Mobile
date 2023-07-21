@@ -5,6 +5,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 
 import colors from '../config/colors';
 import { callApi } from '../services/api';
+import APIConfig from '../config/APIConfig';
 
 function RegisterScreen ({ navigation }) {
     const [email, setEmail] = useState('');
@@ -30,7 +31,7 @@ function RegisterScreen ({ navigation }) {
             return;
         }
         // register user
-        const responseData = await callApi('http://localhost:88/api/user/info/save', 'POST', { 
+        const responseData = await callApi(APIConfig.REGISTER_USER, 'POST', { 
             email: email,
             password: password,
             type: isVendor ? 1 : 0, 
