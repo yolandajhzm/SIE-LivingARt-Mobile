@@ -5,6 +5,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 
 import colors from '../config/colors';
 import { callApi } from '../services/api';
+import APIConfig from '../config/APIConfig';
 
 // TODO: 
 // JWT?
@@ -25,7 +26,7 @@ function LoginScreen ({ navigation }) {
             return;
         }
         // login user
-        // const responseData = await callApi('http://localhost:88/api/user/info/login', 'PUT', { 
+        // const responseData = await callApi(APIConfig.LOGIN_USER, 'PUT', { 
         //     email: email,
         //     password: password,
         // })
