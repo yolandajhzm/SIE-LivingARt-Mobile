@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, {useState, useRef} from 'react';
+import {View, Text, StyleSheet} from 'react-native';
 import {
   ViroARScene,
   ViroText,
@@ -10,7 +10,7 @@ import {
   ViroNode,
   ViroARPlaneSelector,
 } from '@viro-community/react-viro';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import HelloWorldSceneAR from './HelloWorldSceneAR';
 import ReticleSceneAR from './ReticleSceneAR';
 
@@ -42,17 +42,17 @@ const InitialScene = props => {
           position={[0, -1, -1]}
           scale={[0.02, 0.02, 0.02]}
           type="OBJ"
-        onRotate={_onRotate}
-        // rotation={[0, rotation, 0]}
-        // dragType={'FixedToWorld'}
+          onRotate={_onRotate}
+          // rotation={[0, rotation, 0]}
+          // dragType={'FixedToWorld'}
 
-        // dragType="FixedToPlane"
-        // dragPlane={{
-        //   planePoint: [0, -2, 0],
-        //   planeNormal: [0, 1, 0],
-        //   maxDistance: 4
-        // }}
-        // onDrag={() => { }}
+          // dragType="FixedToPlane"
+          // dragPlane={{
+          //   planePoint: [0, -2, 0],
+          //   planeNormal: [0, 1, 0],
+          //   maxDistance: 4
+          // }}
+          // onDrag={() => { }}
         />
       ) : (
         <ViroText
@@ -65,21 +65,21 @@ const InitialScene = props => {
   );
 };
 
-function ARScreen({ navigation }) {
+function ARScreen({navigation}) {
   const [flag, setFlag] = useState(false);
 
   return (
     <View style={styles.container}>
       <ViroARSceneNavigator
-        initialScene={{ scene: ReticleSceneAR }}
+        initialScene={{scene: ReticleSceneAR}}
         // initialScene={{ scene: InitialScene }}
-        viroAppProps={{ flag: flag }}
-        style={{ flex: 1 }}
+        viroAppProps={{flag: flag}}
+        style={{flex: 1}}
       />
 
       <View style={styles.controlsView}>
-        <TouchableOpacity onPress={() => setFlag(!flag)}>
-          <Text style={{ fontSize: 30 }}>Reposition</Text>
+        <TouchableOpacity style={styles.button} onPress={() => setFlag(!flag)}>
+          <Text style={styles.buttonText}>Reposition</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -97,7 +97,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button: {
+    backgroundColor: '#FFFFE0',
+    borderColor: '#000000',
+    borderWidth: 2,
+    borderRadius: 5,
+    padding: 10,
+  },
+  buttonText: {
+    color: '#000000',
+    fontSize: 20,
   },
 });
 
