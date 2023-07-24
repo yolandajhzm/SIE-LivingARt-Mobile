@@ -77,11 +77,11 @@ function ARScreen({ navigation }) {
         style={{ flex: 1 }}
       />
 
-      <View style={styles.controlsView}>
-        <TouchableOpacity onPress={() => setFlag(!flag)}>
-          <Text style={{ fontSize: 30 }}>Reposition</Text>
-        </TouchableOpacity>
-      </View>
+      {/*<View style={styles.controlsView}>*/}
+      {/*  <TouchableOpacity onPress={() => setFlag(!flag)}>*/}
+      {/*    <Text style={{ fontSize: 30 }}>Reposition</Text>*/}
+      {/*  </TouchableOpacity>*/}
+      {/*</View>*/}
     </View>
   );
 }

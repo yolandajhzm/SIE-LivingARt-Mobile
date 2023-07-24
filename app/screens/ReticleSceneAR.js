@@ -14,6 +14,8 @@ import {
   ViroImage,
   ViroQuad,
   ViroBox,
+  ViroFlexView,
+  ViroButton,
 } from '@viro-community/react-viro';
 
 class ReticleSceneAR extends Component {
@@ -32,6 +34,7 @@ class ReticleSceneAR extends Component {
       lastFoundPlaneLocation: [0, 0, 0],
       flag: this.props.sceneNavigator.viroAppProps.flag,
       objectRotation: [0, 0, 0],
+      UIPosition: [0, 0, 0],
     };
 
     console.log('!!flag:', this.state.flag);
@@ -67,6 +70,33 @@ class ReticleSceneAR extends Component {
           castsShadow={true}
           shadowOpacity={0.9}
         />
+        <ViroFlexView
+          transformBehaviors={'billboard'}
+          position={this.state.UIPosition}
+          style={{
+            flexDirection: 'row',
+            padding: 0,
+            // alignItems: 'center',
+            // justifyContent: 'center',
+          }}
+          width={1.5}
+          height={0.5}>
+          <ViroImage
+            source={require('../assets/res/noun-rotate-3697381.png')}
+            style={{flex: 0.2}}
+            scale={[0.3, 0.3, 0.3]}
+          />
+          <ViroImage
+            source={require('../assets/res/noun-refresh-5651.png')}
+            style={{flex: 0.2}}
+            scale={[0.3, 0.3, 0.3]}
+          />
+          <ViroImage
+            source={require('../assets/res/noun-rotate-3697381-flipped.png')}
+            style={{flex: 0.2}}
+            scale={[0.3, 0.3, 0.3]}
+          />
+        </ViroFlexView>
         <ViroText
           text={this.state.text}
           scale={[0.5, 0.5, 0.5]}
@@ -259,6 +289,11 @@ class ReticleSceneAR extends Component {
 
   _onCameraARHitTest(results) {
     // console.log("_onCameraARHitTest");
+    let newUIPosition = [
+      results.cameraOrientation.forward[0] * 1.2,
+      results.cameraOrientation.forward[1] * 1.2,
+      results.cameraOrientation.forward[2] * 1.2,
+    ];
     if (!this.state.isReady) {
       if (results.hitTestResults.length > 0) {
         for (var i = 0; i < results.hitTestResults.length; i++) {
@@ -269,6 +304,7 @@ class ReticleSceneAR extends Component {
               displayHitReticle: true,
               foundPlane: true,
               lastFoundPlaneLocation: result.transform.position,
+              UIPosition: newUIPosition,
             });
             //           this.props.arSceneNavigator.viroAppProps.setIsOverPlane(true);
             return;
@@ -288,6 +324,7 @@ class ReticleSceneAR extends Component {
         planeReticleLocation: newPosition,
         displayHitReticle: true,
         foundPlane: false,
+        UIPosition: newUIPosition,
       });
       return;
     }
