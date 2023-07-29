@@ -9,6 +9,7 @@ import HomeScreen from '../screens/HomeScreen';
 import AccountScreen from '../screens/AccountScreen';
 import DetailScreen from '../screens/DetailScreen';
 import ARScreen from '../screens/ARScreen';
+import WishListScreen from '../screens/WishListScreen';
 
 const Stack = createStackNavigator();
 
@@ -23,7 +24,8 @@ const NavigationContainer = () => {
         <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Account" component={AccountScreen} options={{ headerShown: false }}/>
-        <Stack.Screen name="Detail" component={DetailScreen} options={{ headerShown: false }}/> 
+        <Stack.Screen name="Detail" component={DetailScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="Wishlist" component={WishListScreen} options={{ headerShown: false }}/>  
         <Stack.Screen name="AR" component={ARScreen} />
       </Stack.Navigator>
     </ReactNavigationContainer>

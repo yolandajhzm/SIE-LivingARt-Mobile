@@ -1,13 +1,12 @@
 import React from 'react';
 import{ StyleSheet, View, Button, Text, Image, Dimensions, TouchableOpacity, SafeAreaView } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 
 import { callApi } from '../services/api';
 import colors from '../config/colors';
 
-// TODO: 
-// get info from navigation
 
 function AccountScreen({ navigation }) {
 
@@ -72,6 +71,10 @@ function AccountScreen({ navigation }) {
                     <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Home')} >
                         <AntDesign name="home" size={25} color={colors.lightgray}  />
                         <Text style={styles.iconName} color={colors.lightgray}>Home</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Wishlist')} >
+                        <Entypo name="heart-outlined" size={25} color={colors.lightgray}  />
+                        <Text style={styles.iconName} color={colors.lightgray}>Wishlist</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.iconContainer} onPress={() => {} } >
                         <AntDesign name="user" size={25} color={colors.darkgray} />

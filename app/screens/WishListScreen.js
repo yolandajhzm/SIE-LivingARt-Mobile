@@ -7,16 +7,16 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { callApi } from '../services/api';
 import colors from '../config/colors';
 
-function HomeScreen({ navigation }) {
+function WishListScreen({ navigation }) {
 
     {/* Nav Bar */}
     const initialLayout = {width: Dimensions.get('window').width};
 
-    function routeTemplate({data}) {
+    function WishlistRoute() {
         return (
             <View style={[styles.routeContainer]}>
                 <FlatList
-                        data={data}
+                        data={wishList}
                         renderItem={renderItem}
                         keyExtractor={item => item.id.toString()}
                         numColumns={2}
@@ -25,22 +25,6 @@ function HomeScreen({ navigation }) {
         );
     }
 
-    const AllRoute = () => (
-        routeTemplate({data: allData})
-    );
-    const ChairRoute = () => (
-        routeTemplate({data: chairData})
-    );
-    const TableRoute = () => (
-        routeTemplate({data: tableData})
-    );
-    const SofaRoute = () => (
-        routeTemplate({data: sofaData})
-    );
-    const LampRoute = () => (
-        routeTemplate({data: lampData})
-    );
-    
     // Nav Bar
     const renderTabBar = (props) => (
       <TabBar
@@ -55,27 +39,16 @@ function HomeScreen({ navigation }) {
     
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
-        {key: 'all', title: 'All'},
-        {key: 'chair', title: 'Chair'},
-        {key: 'table', title: 'Table'},
-        {key: 'sofa', title: 'Sofa'},
-        {key: 'lamp', title: 'Lamp'},
+        {key: 'wishlist', title: 'Wishlist'},
     ]);
 
     const renderScene = SceneMap({
-        all: AllRoute,
-        chair: ChairRoute,
-        table: TableRoute,
-        sofa: SofaRoute,
-        lamp: LampRoute,
+        wishlist: WishlistRoute,
     });
 
     {/* Item List */}
     const [allData, setAllData] = useState([]); 
-    const [chairData, setChairData] = useState([]);
-    const [tableData, setTableData] = useState([]);
-    const [sofaData, setSofaData] = useState([]);
-    const [lampData, setLampData] = useState([]);
+    const [wishList, setWishList] = useState([]);
 
     {/* TODO: replace dummy data with data from database */}
     useEffect(() => {
@@ -135,56 +108,14 @@ function HomeScreen({ navigation }) {
 
         setAllData(dummyData);
 
-        let chairItems = [];
-        let tableItems = [];
-        let sofaItems = [];
-        let lampItems = [];
-
-        for(let i = 0; i < dummyData.length; i++) {
-            switch(dummyData[i].type) {
-                case 'chair':
-                    chairItems.push(dummyData[i]);
-                    break;
-                case 'table':
-                    tableItems.push(dummyData[i]);
-                    break;
-                case 'sofa':
-                    sofaItems.push(dummyData[i]);
-                    break;
-                case 'lamp':
-                    lampItems.push(dummyData[i]);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        setChairData(chairItems);
-        setTableData(tableItems);
-        setSofaData(sofaItems);
-        setLampData(lampItems);
+        setWishList(dummyData.filter((item) => item.wish === true));
     }, []);
 
     const handleWishList = (item) => {
         const updatedItem = {  ...item, wish: !item.wish  };
         console.log(updatedItem);
         setAllData(allData.map((dataItem) => dataItem.id === item.id ? updatedItem : dataItem));
-        switch(item.type) {
-            case 'chair':
-                setChairData(chairData.map((dataItem) => dataItem.id === item.id ? updatedItem : dataItem));
-                break;
-            case 'table':
-                setTableData(tableData.map((dataItem) => dataItem.id === item.id ? updatedItem : dataItem));
-                break;
-            case 'sofa':
-                setSofaData(sofaData.map((dataItem) => dataItem.id === item.id ? updatedItem : dataItem));
-                break;
-            case 'lamp':
-                setLampData(lampData.map((dataItem) => dataItem.id === item.id ? updatedItem : dataItem));
-                break;
-            default:
-                break;
-        }
+        // TODO: update database
     }
 
     // each item square
@@ -222,13 +153,13 @@ function HomeScreen({ navigation }) {
             {/* footer view */}
             <View style={styles.footerView}>
                 <View style={styles.footerContainer}>
-                    <TouchableOpacity style={styles.iconContainer} onPress={() => {}} >
-                        <AntDesign name="home" size={25} color={colors.darkgray}  />
-                        <Text style={styles.iconName} color={colors.darkgray}>Home</Text>
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Home')} >
+                        <AntDesign name="home" size={25} color={colors.lightgray}  />
+                        <Text style={styles.iconName} color={colors.lightgray}>Home</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Wishlist')} >
-                        <Entypo name="heart-outlined" size={25} color={colors.lightgray}  />
-                        <Text style={styles.iconName} color={colors.lightgray}>Wishlist</Text>
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => {}} >
+                        <Entypo name="heart-outlined" size={25} color={colors.darkgray}  />
+                        <Text style={styles.iconName} color={colors.darkgray}>Wishlist</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Account')} > 
                         <AntDesign name="user" size={25} color={colors.lightgray} />
@@ -342,4 +273,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default HomeScreen;
+export default WishListScreen;
