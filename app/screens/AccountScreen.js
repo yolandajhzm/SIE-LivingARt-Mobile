@@ -8,7 +8,9 @@ import { callApi } from '../services/api';
 import colors from '../config/colors';
 
 
-function AccountScreen({ navigation }) {
+function AccountScreen({ route, navigation }) {
+
+    const { userId } = route.params;
 
     const handleSignOut = () => {
         navigation.navigate('Welcome');
@@ -68,11 +70,11 @@ function AccountScreen({ navigation }) {
             {/* footer view */}
             <View style={styles.footerView}>
                 <View style={styles.footerContainer}>
-                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Home')} >
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Home', { userId })} >
                         <AntDesign name="home" size={25} color={colors.lightgray}  />
                         <Text style={styles.iconName} color={colors.lightgray}>Home</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Wishlist')} >
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Wishlist', { userId })} >
                         <Entypo name="heart-outlined" size={25} color={colors.lightgray}  />
                         <Text style={styles.iconName} color={colors.lightgray}>Wishlist</Text>
                     </TouchableOpacity>

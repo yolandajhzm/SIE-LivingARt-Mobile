@@ -1,6 +1,7 @@
 import React from 'react';
 import{ StyleSheet, View, Text, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import colors from '../config/colors';
@@ -8,13 +9,14 @@ import colors from '../config/colors';
 
 
 function DetailScreen({ route, navigation }) {
-    const { item } = route.params;
+    const item  = route.params.item;
+    const userId = route.params.userId;
     const { name, imageSource, description } = item; //TODO: add threeModels
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.itemContainer}>
                 <View style={styles.imageContainer}>
-                    <Image source={imageSource} style={styles.image} />
+                    <Image source={ { uri: item.imageSource }} style={styles.image} />
                 </View>
                 <View style={styles.detailContainer}>
                     <Text style={styles.name}>{name}</Text>
@@ -31,11 +33,15 @@ function DetailScreen({ route, navigation }) {
             </View>
             <View style={styles.footerView}>
                 <View style={styles.footerContainer}>
-                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Home')} >
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Home', { userId })} >
                         <AntDesign name="home" size={25} color={colors.lightgray}  />
                         <Text style={styles.iconName} color={colors.lightgray}>Home</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Account')} >
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Wishlist', { userId })} >
+                        <Entypo name="heart-outlined" size={25} color={colors.lightgray}  />
+                        <Text style={styles.iconName} color={colors.lightgray}>Wishlist</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Account', { userId })} >
                         <AntDesign name="user" size={25} color={colors.lightgray} />
                         <Text style={styles.iconName} color={colors.lightgray}>Me</Text>
                     </TouchableOpacity>

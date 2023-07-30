@@ -6,11 +6,13 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 
 import { callApi } from '../services/api';
 import colors from '../config/colors';
+import APIConfig from '../config/APIConfig';
 
-function WishListScreen({ navigation }) {
+function WishListScreen({ route, navigation }) {
 
     {/* Nav Bar */}
     const initialLayout = {width: Dimensions.get('window').width};
+    const { userId } = route.params;
 
     function WishlistRoute() {
         return (
@@ -50,18 +52,17 @@ function WishListScreen({ navigation }) {
     const [allData, setAllData] = useState([]); 
     const [wishList, setWishList] = useState([]);
 
-    {/* TODO: replace dummy data with data from database */}
     useEffect(() => {
-        // const fetchFurniture = async () => {
-        //     try {
-        //       const data = await callApi('http://your-api-url/api/furniture');
-        //       setAllData(data);
-        //     } catch (error) {
-        //       console.error(error);
-        //     }
-        //   };
+        const fetchFurniture = async () => {
+            try {
+              const data = await callApi(`${APIConfig.GET_WISHLIST}/${userId}`);
+              setWishList(data.favorite_list);
+            } catch (error) {
+              console.error(error);
+            }
+        };
         
-        // fetchFurniture();
+        fetchFurniture();
         // Dummy data
         const dummyData = [
         {
@@ -106,27 +107,36 @@ function WishListScreen({ navigation }) {
         },
         ];
 
-        setAllData(dummyData);
+        // setAllData(dummyData);
 
-        setWishList(dummyData.filter((item) => item.wish === true));
+        // setWishList(allData.filter((item) => item.wish === true));
     }, []);
 
-    const handleWishList = (item) => {
-        const updatedItem = {  ...item, wish: !item.wish  };
-        console.log(updatedItem);
-        setAllData(allData.map((dataItem) => dataItem.id === item.id ? updatedItem : dataItem));
-        // TODO: update database
+    const handleWishList = async (item) => {
+        try {
+            const responseData = await callApi(APIConfig.UPDATE_WISHLIST, 'POST', {
+                userId: userId,
+                furnitureId: item.id,
+            });
+            if (responseData.code === 0) {
+                setWishList(wishList.filter((wishlistItem) => wishlistItem.id !== item.id));
+            } else {
+                console.error('Failed to update wishlist status:', responseData.msg);
+            }
+        } catch (error) {
+            console.error('Error updating wishlist status:', error);
+        } 
     }
 
     // each item square
     //source={{ uri: imageSource }}
     const renderItem = ({ item }) => (
         <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Detail', {item: item})}>
-            <Image source={ item.imageSource } style={styles.image} /> 
+            <Image source={ { uri: item.imageSource } } style={styles.image} /> 
             <View style={styles.textContainer}>
                 <Text style={styles.title}>{item.name}</Text>
                 <TouchableOpacity style={styles.wishListIcon} onPress={() => handleWishList(item)} > 
-                    <Entypo name= {item.wish ? "heart" : "heart-outlined"} size={17} color={item.wish ? colors.red : colors.lightgray} />
+                    <Entypo name= { "heart" } size={17} color={colors.red} />
                 </TouchableOpacity>
             </View>   
         </TouchableOpacity>
@@ -153,7 +163,7 @@ function WishListScreen({ navigation }) {
             {/* footer view */}
             <View style={styles.footerView}>
                 <View style={styles.footerContainer}>
-                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Home')} >
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Home', { userId })} >
                         <AntDesign name="home" size={25} color={colors.lightgray}  />
                         <Text style={styles.iconName} color={colors.lightgray}>Home</Text>
                     </TouchableOpacity>
@@ -161,7 +171,7 @@ function WishListScreen({ navigation }) {
                         <Entypo name="heart-outlined" size={25} color={colors.darkgray}  />
                         <Text style={styles.iconName} color={colors.darkgray}>Wishlist</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Account')} > 
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Account', { userId })} > 
                         <AntDesign name="user" size={25} color={colors.lightgray} />
                         <Text style={styles.iconName} color={colors.lightgray}>Me</Text>
                     </TouchableOpacity>
