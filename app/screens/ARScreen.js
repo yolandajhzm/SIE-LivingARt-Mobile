@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {
   ViroARScene,
@@ -13,10 +13,48 @@ import {
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import HelloWorldSceneAR from './HelloWorldSceneAR';
 import ReticleSceneAR from './ReticleSceneAR';
+import RNFS from 'react-native-fs';
+import unzip from 'react-native-zip-archive';
+
+async function fetchAndUnzip() {
+  const zipFilePath = `${RNFS.DocumentDirectoryPath}/model.zip`; // path where the downloaded zip file should be stored
+  const targetPath = `${RNFS.DocumentDirectoryPath}/model`; // path where the unzipped files should be stored
+
+  try {
+    const {jobId, promise} = RNFS.downloadFile({
+      fromUrl:
+        'https://cmu-sie.oss-us-west-1.aliyuncs.com/threeDModels/pdf2png.zip', // URL of the zip file
+      toFile: zipFilePath,
+    });
+
+    await promise; // wait for the file to finish downloading
+    console.log(`download completed at ${zipFilePath}`);
+
+    await unzip(zipFilePath, targetPath); // unzip the downloaded file
+    console.log(`unzip completed at ${targetPath}`);
+  } catch (err) {
+    console.error(err);
+  }
+}
 
 const InitialScene = props => {
   const [rotation, setRotation] = useState(0);
   const objectRef = useRef(null);
+
+  const [objectSource, setObjectSource] = useState(null);
+  const [resources, setResources] = useState([]);
+
+  useEffect(() => {
+    fetchAndUnzip().then(() => {
+      // Assuming the unzipped files are named as `model.obj` and `texture.jpg`
+      setObjectSource({
+        uri: `file://${RNFS.DocumentDirectoryPath}/model/model.obj`,
+      });
+      setResources([
+        {uri: `file://${RNFS.DocumentDirectoryPath}/model/texture.jpg`},
+      ]);
+    });
+  }, []);
 
   function _onRotate(rotateState, rotationFactor, source) {
     const scale = 0.1;
@@ -33,12 +71,14 @@ const InitialScene = props => {
 
       {data.flag === true ? (
         <Viro3DObject
-          source={require('../assets/model3D/whiteChair/modern_chair11obj.obj')}
-          resources={[
-            require('../assets/model3D/whiteChair/modern_chair11obj.mtl'),
-            require('../assets/model3D/whiteChair/0027.JPG'),
-            require('../assets/model3D/whiteChair/unrawpText.JPG'),
-          ]}
+          //source={require('../assets/model3D/whiteChair/modern_chair11obj.obj')}
+          source={objectSource}
+          // resources={[
+          //   require('../assets/model3D/whiteChair/modern_chair11obj.mtl'),
+          //   require('../assets/model3D/whiteChair/0027.JPG'),
+          //   require('../assets/model3D/whiteChair/unrawpText.JPG'),
+          // ]}
+          resource={resources}
           position={[0, -1, -1]}
           scale={[0.02, 0.02, 0.02]}
           type="OBJ"
