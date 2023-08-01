@@ -16,14 +16,13 @@ import ReticleSceneAR from './ReticleSceneAR';
 import RNFS from 'react-native-fs';
 import unzip from 'react-native-zip-archive';
 
-async function fetchAndUnzip() {
+async function fetchAndUnzip(fromUrl) {
   const zipFilePath = `${RNFS.DocumentDirectoryPath}/model.zip`; // path where the downloaded zip file should be stored
   const targetPath = `${RNFS.DocumentDirectoryPath}/model`; // path where the unzipped files should be stored
 
   try {
     const {jobId, promise} = RNFS.downloadFile({
-      fromUrl:
-        'https://cmu-sie.oss-us-west-1.aliyuncs.com/threeDModels/pdf2png.zip', // URL of the zip file
+      fromUrl: fromUrl, // use the argument as the URL
       toFile: zipFilePath,
     });
 
