@@ -1,5 +1,5 @@
 import React from 'react';
-import{ StyleSheet, View, Text, Image, TouchableOpacity, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -22,13 +22,13 @@ function DetailScreen({ route, navigation }) {
                     <Text style={styles.name}>{name}</Text>
                     <Text style={styles.description} numberOfLines={5} ellipsizeMode="tail">{description}</Text>
                 </View>
-                    
+
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AR')} >
                         <MaterialCommunityIcons name="rotate-3d" size={24} style={styles.camera} />
                         <Text style={styles.buttonText}>View in AR</Text>
                     </TouchableOpacity>
-                    
+
                 </View>
             </View>
             <View style={styles.footerView}>
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
         position: "absolute",
     },
     buttonContainer: {
-        flex: 0.5, 
+        flex: 0.5,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -82,11 +82,11 @@ const styles = StyleSheet.create({
         left: "10%",
     },
     container: {
-        flex: 1, 
-        backgroundColor: colors.white
+        flex: 1,
+        backgroundColor: colors.white,
     },
     detailContainer: {
-        flex: 1, 
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -107,35 +107,35 @@ const styles = StyleSheet.create({
         top: "5%",
     },
     image: {
-        width: '100%', 
+        width: '100%',
         height: '100%',
         resizeMode: 'contain',
     },
     imageContainer: {
-        flex: 3.5, 
+        flex: 3.5,
     },
     itemContainer: {
         flex: 6.6,
         backgroundColor: colors.white,
     },
     footerContainer: {
-        flex: 1, 
-        flexDirection: 'row', 
-        borderTopColor: colors.lightgray, 
+        flex: 1,
+        flexDirection: 'row',
+        borderTopColor: colors.lightgray,
         borderTopWidth: 1
     },
     footerView: {
         flex: 0.3
     },
     iconContainer: {
-        flex: 1, 
-        top: 10, 
-        alignItems: 'center', 
+        flex: 1,
+        top: 10,
+        alignItems: 'center',
         justifyContent: 'center'
     },
     iconName: {
-        fontSize: 12, 
-        top: 5, 
+        fontSize: 12,
+        top: 5,
     },
 });
 

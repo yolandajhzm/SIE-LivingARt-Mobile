@@ -11,6 +11,7 @@ import DetailScreen from '../screens/DetailScreen';
 import ARScreen from '../screens/ARScreen';
 import WishListScreen from '../screens/WishListScreen';
 
+
 const Stack = createStackNavigator();
 
 const NavigationContainer = () => {
@@ -18,7 +19,7 @@ const NavigationContainer = () => {
     <ReactNavigationContainer>
       <Stack.Navigator>
         {/* <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/> */}
-      
+
         <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }}/>

@@ -45,6 +45,9 @@ target 'LivingARt' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
+  
+  pod 'ViroReact', :path => '../node_modules/@viro-community/react-viro/ios'
+  pod 'ViroKit', :path => '../node_modules/@viro-community/react-viro/ios/dist/ViroRenderer/'
 
   target 'LivingARtTests' do
     inherit! :complete
