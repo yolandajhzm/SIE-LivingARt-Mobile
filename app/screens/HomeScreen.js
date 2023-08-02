@@ -95,53 +95,6 @@ function HomeScreen({ route, navigation }) {
             };
             
             fetchFurniture();
-            // Dummy data
-            const dummyData = [
-            {
-                id: 1,
-                wish: true,
-                name: 'Chair 1',
-                type: 'chair',
-                imageSource: require('../assets/chair.png'),
-                description: 'This is a chair This is a chair This is a chair This is a chair This is a chair This is a chair This is a chair This is a chair This is a chair',
-            },
-            {
-                id: 2,
-                wish: false,
-                name: 'Table 1',
-                type: 'table',
-                imageSource: require('../assets/table.png'),
-                description: 'This is a table',
-            },
-            {
-                id: 3,
-                wish: false,
-                name: 'Sofa 1',
-                type: 'sofa',
-                imageSource: require('../assets/sofa.png'),
-                description: 'This is a sofa',
-            },
-            {
-                id: 4,
-                wish: true,
-                name: 'Table 2',
-                type: 'table',
-                imageSource: require('../assets/table.png'),
-                description: 'This is a table',
-            },
-            {
-                id: 5,
-                wish: false,
-                name: 'Chair 2',
-                type: 'chair',
-                imageSource: require('../assets/chair.png'),
-                description: 'This is a chair',
-            },
-            ];
-
-            // setAllData(dummyData);
-
-            
 
             const fetchWishlist = async () => {
                 try {

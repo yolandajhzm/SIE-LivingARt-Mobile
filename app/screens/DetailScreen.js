@@ -11,7 +11,7 @@ import colors from '../config/colors';
 function DetailScreen({ route, navigation }) {
     const item  = route.params.item;
     const userId = route.params.userId;
-    const { name, imageSource, description } = item; //TODO: add threeModels
+    const { name, imageSource, description, threeModels } = item; 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.itemContainer}>
@@ -24,7 +24,7 @@ function DetailScreen({ route, navigation }) {
                 </View>
 
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AR')} >
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AR', { threeModels })} >
                         <MaterialCommunityIcons name="rotate-3d" size={24} style={styles.camera} />
                         <Text style={styles.buttonText}>View in AR</Text>
                     </TouchableOpacity>
