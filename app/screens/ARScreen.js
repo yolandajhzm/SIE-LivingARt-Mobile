@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import {View, Text} from 'react-native';
 
-function ARScreen({ navigation }) {
-    return (
-        <View>
-            <Text>AR Screen</Text>
-        </View>
-    );
+function ARScreen({navigation}) {
+  return (
+    <View>
+      <Text>AR Screen</Text>
+    </View>
+  );
 }
 
 export default ARScreen;
