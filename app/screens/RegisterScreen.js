@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import  { View, Text, Button, StyleSheet, Image, ImageBackground, Dimensions } from 'react-native';
+import  { View, Text, Button, Switch, StyleSheet, Image, ImageBackground, Dimensions } from 'react-native';
 import  FloatingLabel  from 'react-native-floating-labels';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 import colors from '../config/colors';
 import { callApi } from '../services/api';
-
-// TODO: 
-// icon: email check?
+import APIConfig from '../config/APIConfig';
 
 function RegisterScreen ({ navigation }) {
     const [email, setEmail] = useState('');
@@ -15,10 +13,11 @@ function RegisterScreen ({ navigation }) {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [isVendor, setIsVendor] = useState(false);
 
     const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
   
-    const handleSignUp = () => {
+    const handleSignUp = async () => {
         if (!email || !email.match(isValidEmail)) {
             alert('Please enter a valid email address');
             return;
@@ -32,14 +31,24 @@ function RegisterScreen ({ navigation }) {
             return;
         }
         // register user
-        const responseData = callApi('API_URL', 'POST', { email, password })
-        
-        // TODO: handle response
-        if (true) {
-            navigation.navigate('Login');
-        } else {
-            alert('Registration failed');
-        }
+        const responseData = await callApi(APIConfig.REGISTER_USER, 'POST', { 
+            email: email,
+            password: password,
+            type: isVendor ? 1 : 0, 
+        })
+
+        // handle response
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+        setTimeout(() => {
+            if (responseData.code === 0) { 
+                handleLogin();
+            } else {
+                alert(responseData.msg);
+                console.error("Sign up failed");
+            }
+        }, 1);
     };  
 
     const handleLogin = () => {
@@ -109,6 +118,19 @@ function RegisterScreen ({ navigation }) {
                             size={20} 
                             style={styles.icon} 
                             onPress={() => setShowConfirmPassword(!showConfirmPassword)} 
+                        />
+                    </View>
+                    <View style={styles.vendorSelection}>
+                        <Text 
+                            style={styles.switchText}
+                        >Are you a vendor?</Text>
+                        <Switch
+                            trackColor={{ false: colors.white, true: colors.darkgray }}
+                            thumbColor={colors.white}
+                            ios_backgroundColor= {colors.white}
+                            style={styles.switch}
+                            onValueChange={setIsVendor}
+                            value={isVendor}
                         />
                     </View>
                 </View>
@@ -208,7 +230,26 @@ const styles = StyleSheet.create({
         width: 100,
         height: 100,
         bottom: "10%"
-    }
+    },
+    switch: {
+        position: "absolute",
+        right: 0,
+        top: 20,
+        transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }]
+
+    },
+    switchText: {
+        color: colors.black,
+        fontSize: 16,
+        marginTop: 20,
+        marginLeft: 25,
+
+    },
+    vendorSelection: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 20,
+      },
   });  
 
 export default RegisterScreen;

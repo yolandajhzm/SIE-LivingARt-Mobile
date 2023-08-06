@@ -1,29 +1,30 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import colors from '../config/colors';
 
-// TODO:
-// AR screen
+
 
 function DetailScreen({ route, navigation }) {
-    const { item } = route.params;
-    const { id, name, type, imageSource, description } = item;
+    const item  = route.params.item;
+    const userId = route.params.userId;
+    const { name, imageSource, description, threeModels } = item; 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.itemContainer}>
                 <View style={styles.imageContainer}>
-                    <Image source={imageSource} style={styles.image} />
+                    <Image source={ { uri: item.imageSource }} style={styles.image} />
                 </View>
                 <View style={styles.detailContainer}>
                     <Text style={styles.name}>{name}</Text>
-                    <Text style={styles.description}>{description}</Text>
+                    <Text style={styles.description} numberOfLines={5} ellipsizeMode="tail">{description}</Text>
                 </View>
 
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AR')} >
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AR', { threeModels })} >
                         <MaterialCommunityIcons name="rotate-3d" size={24} style={styles.camera} />
                         <Text style={styles.buttonText}>View in AR</Text>
                     </TouchableOpacity>
@@ -32,11 +33,15 @@ function DetailScreen({ route, navigation }) {
             </View>
             <View style={styles.footerView}>
                 <View style={styles.footerContainer}>
-                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Home')} >
-                        <AntDesign name="home" size={25} color={colors.lightgray} />
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Home', { userId })} >
+                        <AntDesign name="home" size={25} color={colors.lightgray}  />
                         <Text style={styles.iconName} color={colors.lightgray}>Home</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Account')} >
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Wishlist', { userId })} >
+                        <Entypo name="heart-outlined" size={25} color={colors.lightgray}  />
+                        <Text style={styles.iconName} color={colors.lightgray}>Wishlist</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Account', { userId })} >
                         <AntDesign name="user" size={25} color={colors.lightgray} />
                         <Text style={styles.iconName} color={colors.lightgray}>Me</Text>
                     </TouchableOpacity>
@@ -89,8 +94,9 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontFamily: 'Avenir',
         color: colors.gray,
-        position: 'absolute',
-        bottom: "50%",
+        width: '80%',
+        marginTop: 10,
+        textAlign: 'center',
     },
     name: {
         fontSize: 25,

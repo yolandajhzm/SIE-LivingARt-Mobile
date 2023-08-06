@@ -3,23 +3,22 @@ import{ StyleSheet, View, FlatList, Text, Image, Dimensions, TouchableOpacity, S
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import { useFocusEffect } from '@react-navigation/native';
 
 import { callApi } from '../services/api';
 import colors from '../config/colors';
 import APIConfig from '../config/APIConfig';
 
-function HomeScreen({ route, navigation }) {
+function WishListScreen({ route, navigation }) {
 
     {/* Nav Bar */}
     const initialLayout = {width: Dimensions.get('window').width};
     const { userId } = route.params;
 
-    function routeTemplate({data}) {
+    function WishlistRoute() {
         return (
             <View style={[styles.routeContainer]}>
                 <FlatList
-                        data={data}
+                        data={wishList}
                         renderItem={renderItem}
                         keyExtractor={item => item.id.toString()}
                         numColumns={2}
@@ -28,22 +27,6 @@ function HomeScreen({ route, navigation }) {
         );
     }
 
-    const AllRoute = () => (
-        routeTemplate({data: allData})
-    );
-    const ChairRoute = () => (
-        routeTemplate({data: chairData})
-    );
-    const TableRoute = () => (
-        routeTemplate({data: tableData})
-    );
-    const SofaRoute = () => (
-        routeTemplate({data: sofaData})
-    );
-    const LampRoute = () => (
-        routeTemplate({data: lampData})
-    );
-    
     // Nav Bar
     const renderTabBar = (props) => (
       <TabBar
@@ -58,87 +41,76 @@ function HomeScreen({ route, navigation }) {
     
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
-        {key: 'all', title: 'All'},
-        {key: 'chair', title: 'Chair'},
-        {key: 'table', title: 'Table'},
-        {key: 'sofa', title: 'Sofa'},
-        {key: 'lamp', title: 'Lamp'},
+        {key: 'wishlist', title: 'Wishlist'},
     ]);
 
     const renderScene = SceneMap({
-        all: AllRoute,
-        chair: ChairRoute,
-        table: TableRoute,
-        sofa: SofaRoute,
-        lamp: LampRoute,
+        wishlist: WishlistRoute,
     });
 
     {/* Item List */}
     const [allData, setAllData] = useState([]); 
-    const [chairData, setChairData] = useState([]);
-    const [tableData, setTableData] = useState([]);
-    const [sofaData, setSofaData] = useState([]);
-    const [lampData, setLampData] = useState([]);
-
     const [wishList, setWishList] = useState([]);
 
-    {/* TODO: replace dummy data with data from database */}
-    useFocusEffect(
-        React.useCallback(() => {
-            const fetchFurniture = async () => {
-                try {
-                const data = await callApi(APIConfig.GET_ALL_FURNITURE);
-                setAllData(data.page.list);
-                } catch (error) {
-                console.error(error);
-                }
-            };
-            
-            fetchFurniture();
-
-            const fetchWishlist = async () => {
-                try {
-                const data = await callApi(`${APIConfig.GET_WISHLIST}/${userId}`);
-                setWishList(data.favorite_list);
-                } catch (error) {
-                console.error(error);
-                }
-            };
-            
-            fetchWishlist();
-        }, [])
-    );
-
     useEffect(() => {
-        let chairItems = [];
-        let tableItems = [];
-        let sofaItems = [];
-        let lampItems = [];
-
-        for(let i = 0; i < allData.length; i++) {
-            switch(allData[i].type) {
-                case 'chair':
-                    chairItems.push(allData[i]);
-                    break;
-                case 'table':
-                    tableItems.push(allData[i]);
-                    break;
-                case 'sofa':
-                    sofaItems.push(allData[i]);
-                    break;
-                case 'lamp':
-                    lampItems.push(allData[i]);
-                    break;
-                default:
-                    break;
+        const fetchFurniture = async () => {
+            try {
+              const data = await callApi(`${APIConfig.GET_WISHLIST}/${userId}`);
+              setWishList(data.favorite_list);
+            } catch (error) {
+              console.error(error);
             }
-        }
+        };
+        
+        fetchFurniture();
+        // Dummy data
+        const dummyData = [
+        {
+            id: 1,
+            wish: true,
+            name: 'Chair 1',
+            type: 'chair',
+            imageSource: require('../assets/chair.png'),
+            description: 'This is a chair This is a chair This is a chair This is a chair This is a chair This is a chair This is a chair This is a chair This is a chair',
+        },
+        {
+            id: 2,
+            wish: false,
+            name: 'Table 1',
+            type: 'table',
+            imageSource: require('../assets/table.png'),
+            description: 'This is a table',
+        },
+        {
+            id: 3,
+            wish: false,
+            name: 'Sofa 1',
+            type: 'sofa',
+            imageSource: require('../assets/sofa.png'),
+            description: 'This is a sofa',
+        },
+        {
+            id: 4,
+            wish: true,
+            name: 'Table 2',
+            type: 'table',
+            imageSource: require('../assets/table.png'),
+            description: 'This is a table',
+        },
+        {
+            id: 5,
+            wish: false,
+            name: 'Chair 2',
+            type: 'chair',
+            imageSource: require('../assets/chair.png'),
+            description: 'This is a chair',
+        },
+        ];
 
-        setChairData(chairItems);
-        setTableData(tableItems);
-        setSofaData(sofaItems);
-        setLampData(lampItems);
-    }, [allData]);
+        // setAllData(dummyData);
+
+        // setWishList(allData.filter((item) => item.wish === true));
+    }, []);
 
     const handleWishList = async (item) => {
         try {
@@ -147,30 +119,24 @@ function HomeScreen({ route, navigation }) {
                 furnitureId: item.id,
             });
             if (responseData.code === 0) {
-                const isItemInWishlist = wishList.some((wishlistItem) => wishlistItem.id === item.id);
-                if (isItemInWishlist) {
-                    setWishList(wishList.filter((wishlistItem) => wishlistItem.id !== item.id));
-                } else {
-                    setWishList([...wishList, item]);
-                }
-
+                setWishList(wishList.filter((wishlistItem) => wishlistItem.id !== item.id));
             } else {
                 console.error('Failed to update wishlist status:', responseData.msg);
             }
         } catch (error) {
-        console.error('Error updating wishlist status:', error);
+            console.error('Error updating wishlist status:', error);
         } 
-    };
+    }
 
     // each item square
     //source={{ uri: imageSource }}
     const renderItem = ({ item }) => (
-        <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Detail', { item: item, userId: userId })}>
+        <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Detail', {item: item})}>
             <Image source={ { uri: item.imageSource } } style={styles.image} /> 
             <View style={styles.textContainer}>
                 <Text style={styles.title}>{item.name}</Text>
                 <TouchableOpacity style={styles.wishListIcon} onPress={() => handleWishList(item)} > 
-                    <Entypo name= {wishList.some((wishlistItem) => wishlistItem.id === item.id) ? "heart" : "heart-outlined"} size={17} color={wishList.some((wishlistItem) => wishlistItem.id === item.id) ? colors.red : colors.lightgray} />
+                    <Entypo name= { "heart" } size={17} color={colors.red} />
                 </TouchableOpacity>
             </View>   
         </TouchableOpacity>
@@ -197,13 +163,13 @@ function HomeScreen({ route, navigation }) {
             {/* footer view */}
             <View style={styles.footerView}>
                 <View style={styles.footerContainer}>
-                    <TouchableOpacity style={styles.iconContainer} onPress={() => {}} >
-                        <AntDesign name="home" size={25} color={colors.darkgray}  />
-                        <Text style={styles.iconName} color={colors.darkgray}>Home</Text>
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Home', { userId })} >
+                        <AntDesign name="home" size={25} color={colors.lightgray}  />
+                        <Text style={styles.iconName} color={colors.lightgray}>Home</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Wishlist', { userId })} >
-                        <Entypo name="heart-outlined" size={25} color={colors.lightgray}  />
-                        <Text style={styles.iconName} color={colors.lightgray}>Wishlist</Text>
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => {}} >
+                        <Entypo name="heart-outlined" size={25} color={colors.darkgray}  />
+                        <Text style={styles.iconName} color={colors.darkgray}>Wishlist</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Account', { userId })} > 
                         <AntDesign name="user" size={25} color={colors.lightgray} />
@@ -317,4 +283,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default HomeScreen;
+export default WishListScreen;
