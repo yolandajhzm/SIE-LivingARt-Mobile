@@ -51,6 +51,10 @@ class ReticleSceneAR extends Component {
     this.fetchAndUnzip = this.fetchAndUnzip.bind(this);
   }
 
+  async componentDidMount() {
+    await this.fetchAndUnzip(this.state.modelUrl);
+  }
+
   async fetchAndUnzip(fromUrl) {
     const zipFilePath = `${RNFS.DocumentDirectoryPath}/model.zip`; // path where the downloaded zip file should be stored
     const targetPath = `${RNFS.DocumentDirectoryPath}/model`; // path where the unzipped files should be stored
