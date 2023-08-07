@@ -74,14 +74,16 @@ class ReticleSceneAR extends Component {
       console.log(`unzip completed at ${targetPath}`);
 
       // Read the contents of the unzipped folder
-      const files = await RNFS.readDir(targetPath + '/whiteChair');
-      console.log('files', files);
+      const files = await RNFS.readDir(targetPath);
+      const item = files[0];
+      const innerFiles = await RNFS.readDir(item.path);
+      console.log('Files inside the directory:', innerFiles);
 
       // Find the OBJ file and other resource files
       let objFile = null;
       let resources = [];
 
-      files.forEach(file => {
+      innerFiles.forEach(file => {
         if (file.name.endsWith('.obj')) {
           objFile = file.path;
         } else {
