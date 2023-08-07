@@ -74,7 +74,9 @@ function HomeScreen({ route, navigation }) {
     });
 
     {/* Item List */}
+    // const [data, setData] = useState([]);
     const [allData, setAllData] = useState([]); 
+    const [dimensionData, setDimensionData] = useState([]); 
     const [chairData, setChairData] = useState([]);
     const [tableData, setTableData] = useState([]);
     const [sofaData, setSofaData] = useState([]);
@@ -88,61 +90,17 @@ function HomeScreen({ route, navigation }) {
             const fetchFurniture = async () => {
                 try {
                 const data = await callApi(APIConfig.GET_ALL_FURNITURE);
-                setAllData(data.page.list);
+                const infoObjects = data.data.map((item) => item.info);
+                const dimensionObjects = data.data.map((item) => item.dimension);
+                setAllData(infoObjects);
+                setDimensionData(dimensionObjects);
                 } catch (error) {
                 console.error(error);
                 }
             };
             
             fetchFurniture();
-            // Dummy data
-            const dummyData = [
-            {
-                id: 1,
-                wish: true,
-                name: 'Chair 1',
-                type: 'chair',
-                imageSource: require('../assets/chair.png'),
-                description: 'This is a chair This is a chair This is a chair This is a chair This is a chair This is a chair This is a chair This is a chair This is a chair',
-            },
-            {
-                id: 2,
-                wish: false,
-                name: 'Table 1',
-                type: 'table',
-                imageSource: require('../assets/table.png'),
-                description: 'This is a table',
-            },
-            {
-                id: 3,
-                wish: false,
-                name: 'Sofa 1',
-                type: 'sofa',
-                imageSource: require('../assets/sofa.png'),
-                description: 'This is a sofa',
-            },
-            {
-                id: 4,
-                wish: true,
-                name: 'Table 2',
-                type: 'table',
-                imageSource: require('../assets/table.png'),
-                description: 'This is a table',
-            },
-            {
-                id: 5,
-                wish: false,
-                name: 'Chair 2',
-                type: 'chair',
-                imageSource: require('../assets/chair.png'),
-                description: 'This is a chair',
-            },
-            ];
-
-            // setAllData(dummyData);
-
             
-
             const fetchWishlist = async () => {
                 try {
                 const data = await callApi(`${APIConfig.GET_WISHLIST}/${userId}`);
@@ -157,6 +115,7 @@ function HomeScreen({ route, navigation }) {
     );
 
     useEffect(() => {
+
         let chairItems = [];
         let tableItems = [];
         let sofaItems = [];
@@ -209,10 +168,13 @@ function HomeScreen({ route, navigation }) {
         } 
     };
 
+    const findItemInDimensionData = (furnitureId) => {
+        return dimensionData.find((item) => item.furnitureId === furnitureId);
+    };
+
     // each item square
-    //source={{ uri: imageSource }}
     const renderItem = ({ item }) => (
-        <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Detail', { item: item, userId: userId })}>
+        <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Detail', { item: item, userId: userId, dimension: findItemInDimensionData(item.id)})}>
             <Image source={ { uri: item.imageSource } } style={styles.image} /> 
             <View style={styles.textContainer}>
                 <Text style={styles.title}>{item.name}</Text>

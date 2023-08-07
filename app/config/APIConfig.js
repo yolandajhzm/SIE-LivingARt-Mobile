@@ -1,4 +1,4 @@
-const BASE_URL = 'https://5f9a-2601-647-4b80-78a0-8945-a485-1459-2b10.ngrok-free.app/api';
+const BASE_URL = 'http://172.19.137.178:8888/api';
 
 const APIConfig = {
     REGISTER_USER: `${BASE_URL}/user/info/save`,
