@@ -15,7 +15,7 @@ import {
   ViroBox,
 } from '@viro-community/react-viro';
 import RNFS from 'react-native-fs';
-import unzip from 'react-native-zip-archive';
+import {unzip} from 'react-native-zip-archive';
 
 class ReticleSceneAR extends Component {
   constructor(props) {
@@ -33,6 +33,8 @@ class ReticleSceneAR extends Component {
       lastFoundPlaneLocation: [0, 0, 0],
       flag: this.props.sceneNavigator.viroAppProps.flag,
       objectRotation: [0, 0, 0],
+      modelSource: null,
+      modelResources: [],
       modelUrl:
         'https://cmu-sie.oss-us-west-1.aliyuncs.com/threeDModels/5925aee6-e13f-4035-aa82-b675d464d3b2whiteChair.zip',
     };
@@ -70,6 +72,32 @@ class ReticleSceneAR extends Component {
 
       await unzip(zipFilePath, targetPath); // unzip the downloaded file
       console.log(`unzip completed at ${targetPath}`);
+
+      // Read the contents of the unzipped folder
+      const files = await RNFS.readDir(targetPath + '/whiteChair');
+      console.log('files', files);
+
+      // Find the OBJ file and other resource files
+      let objFile = null;
+      let resources = [];
+
+      files.forEach(file => {
+        if (file.name.endsWith('.obj')) {
+          objFile = file.path;
+        } else {
+          resources.push({uri: file.path});
+        }
+      });
+
+      // Update the state with the found files
+      if (objFile) {
+        this.setState({
+          modelSource: {uri: objFile},
+          modelResources: resources,
+        });
+      } else {
+        console.error('No OBJ file found in the unzipped folder');
+      }
     } catch (err) {
       console.error(err);
     }
@@ -207,32 +235,9 @@ class ReticleSceneAR extends Component {
           }}
           // scale={[.1, .1, .1]}
         >
-          {/* <Viro3DObject
-            visible={this.state.isReady}
-            position={[0, .5, 0]}
-            source={require('./res/emoji_heart_anim/emoji_heart_anim.vrx')}
-            resources={[
-              require('./res/emoji_heart_anim/emoji_heart.png'),
-              require('./res/emoji_heart_anim/emoji_heart_specular.png'),
-            ]}
-            animation={{ name: "02", delay: 0, loop: true, run: true }}
-            type="VRX" /> */}
-          {/* <ViroBox
-            visible={this.state.isReady}
-            position={[0, .5, 0]}
-            onClickState={this._onClickObject}>
-          </ViroBox> */}
           <Viro3DObject
-            source={{
-              uri: `${RNFS.DocumentDirectoryPath}/modern_chair11obj.obj`,
-            }} // adjust with your correct file path
-            resources={[
-              {
-                uri: `${RNFS.DocumentDirectoryPath}/modern_chair11obj.mtl`,
-              }, // adjust with your correct file path
-              {uri: `${RNFS.DocumentDirectoryPath}/0027.JPG`}, // adjust with your correct file path
-              {uri: `${RNFS.DocumentDirectoryPath}/unrawpText.JPG`}, // adjust with your correct file path
-            ]}
+            source={this.state.modelSource}
+            resources={this.state.modelResources}
             visible={this.state.isReady}
             rotation={this.state.objectRotation}
             onClickState={this._onClickObject}
@@ -291,7 +296,6 @@ class ReticleSceneAR extends Component {
   }
 
   _onCameraARHitTest(results) {
-    // console.log("_onCameraARHitTest");
     if (!this.state.isReady) {
       if (results.hitTestResults.length > 0) {
         for (var i = 0; i < results.hitTestResults.length; i++) {
@@ -303,7 +307,6 @@ class ReticleSceneAR extends Component {
               foundPlane: true,
               lastFoundPlaneLocation: result.transform.position,
             });
-            //           this.props.arSceneNavigator.viroAppProps.setIsOverPlane(true);
             return;
           }
         }
