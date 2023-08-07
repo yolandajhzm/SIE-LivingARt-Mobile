@@ -13,56 +13,56 @@ import {
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import ReticleSceneAR from './ReticleSceneAR';
 
-const InitialScene = props => {
-  const [rotation, setRotation] = useState(0);
-  const objectRef = useRef(null);
+// const InitialScene = props => {
+//   const [rotation, setRotation] = useState(0);
+//   const objectRef = useRef(null);
 
-  function _onRotate(rotateState, rotationFactor, source) {
-    const scale = 0.1;
-    if (rotateState == 2) {
-      setRotation(prevRotation => prevRotation + rotationFactor * scale);
-    }
-  }
+//   function _onRotate(rotateState, rotationFactor, source) {
+//     const scale = 0.1;
+//     if (rotateState == 2) {
+//       setRotation(prevRotation => prevRotation + rotationFactor * scale);
+//     }
+//   }
 
-  let data = props.sceneNavigator.viroAppProps;
+//   let data = props.sceneNavigator.viroAppProps;
 
-  return (
-    <ViroARScene>
-      <ViroAmbientLight color="#ffffff" />
+//   return (
+//     <ViroARScene>
+//       <ViroAmbientLight color="#ffffff" />
 
-      {data.flag === true ? (
-        <Viro3DObject
-          source={require('../assets/model3D/whiteChair/modern_chair11obj.obj')}
-          resources={[
-            require('../assets/model3D/whiteChair/modern_chair11obj.mtl'),
-            require('../assets/model3D/whiteChair/0027.JPG'),
-            require('../assets/model3D/whiteChair/unrawpText.JPG'),
-          ]}
-          position={[0, -1, -1]}
-          scale={[0.02, 0.02, 0.02]}
-          type="OBJ"
-          onRotate={_onRotate}
-          // rotation={[0, rotation, 0]}
-          // dragType={'FixedToWorld'}
+//       {data.flag === true ? (
+//         <Viro3DObject
+//           source={require('../assets/model3D/whiteChair/modern_chair11obj.obj')}
+//           resources={[
+//             require('../assets/model3D/whiteChair/modern_chair11obj.mtl'),
+//             require('../assets/model3D/whiteChair/0027.JPG'),
+//             require('../assets/model3D/whiteChair/unrawpText.JPG'),
+//           ]}
+//           position={[0, -1, -1]}
+//           scale={[0.02, 0.02, 0.02]}
+//           type="OBJ"
+//           onRotate={_onRotate}
+//           // rotation={[0, rotation, 0]}
+//           // dragType={'FixedToWorld'}
 
-          // dragType="FixedToPlane"
-          // dragPlane={{
-          //   planePoint: [0, -2, 0],
-          //   planeNormal: [0, 1, 0],
-          //   maxDistance: 4
-          // }}
-          // onDrag={() => { }}
-        />
-      ) : (
-        <ViroText
-          text={'Object is Hidden'}
-          scale={[0.5, 0.5, 0.5]}
-          position={[0, 0, -1]}
-        />
-      )}
-    </ViroARScene>
-  );
-};
+//           // dragType="FixedToPlane"
+//           // dragPlane={{
+//           //   planePoint: [0, -2, 0],
+//           //   planeNormal: [0, 1, 0],
+//           //   maxDistance: 4
+//           // }}
+//           // onDrag={() => { }}
+//         />
+//       ) : (
+//         <ViroText
+//           text={'Object is Hidden'}
+//           scale={[0.5, 0.5, 0.5]}
+//           position={[0, 0, -1]}
+//         />
+//       )}
+//     </ViroARScene>
+//   );
+// };
 
 function ARScreen({navigation}) {
   const [flag, setFlag] = useState(false);

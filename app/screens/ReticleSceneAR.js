@@ -14,6 +14,8 @@ import {
   ViroQuad,
   ViroBox,
 } from '@viro-community/react-viro';
+import RNFS from 'react-native-fs';
+import unzip from 'react-native-zip-archive';
 
 class ReticleSceneAR extends Component {
   constructor(props) {
@@ -31,6 +33,8 @@ class ReticleSceneAR extends Component {
       lastFoundPlaneLocation: [0, 0, 0],
       flag: this.props.sceneNavigator.viroAppProps.flag,
       objectRotation: [0, 0, 0],
+      modelUrl:
+        'https://cmu-sie.oss-us-west-1.aliyuncs.com/threeDModels/5925aee6-e13f-4035-aa82-b675d464d3b2whiteChair.zip',
     };
 
     console.log('!!flag:', this.state.flag);
@@ -43,6 +47,28 @@ class ReticleSceneAR extends Component {
     this._getModel = this._getModel.bind(this);
     this._onCameraARHitTest = this._onCameraARHitTest.bind(this);
     this._onRotateObject = this._onRotateObject.bind(this);
+
+    this.fetchAndUnzip = this.fetchAndUnzip.bind(this);
+  }
+
+  async fetchAndUnzip(fromUrl) {
+    const zipFilePath = `${RNFS.DocumentDirectoryPath}/model.zip`; // path where the downloaded zip file should be stored
+    const targetPath = `${RNFS.DocumentDirectoryPath}/model`; // path where the unzipped files should be stored
+
+    try {
+      const {jobId, promise} = RNFS.downloadFile({
+        fromUrl: fromUrl, // use the argument as the URL
+        toFile: zipFilePath,
+      });
+
+      await promise; // wait for the file to finish downloading
+      console.log(`download completed at ${zipFilePath}`);
+
+      await unzip(zipFilePath, targetPath); // unzip the downloaded file
+      console.log(`unzip completed at ${targetPath}`);
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   componentWillReceiveProps = props => {
@@ -193,11 +219,15 @@ class ReticleSceneAR extends Component {
             onClickState={this._onClickObject}>
           </ViroBox> */}
           <Viro3DObject
-            source={require('../assets/model3D/whiteChair/modern_chair11obj.obj')}
+            source={{
+              uri: `${RNFS.DocumentDirectoryPath}/modern_chair11obj.obj`,
+            }} // adjust with your correct file path
             resources={[
-              require('../assets/model3D/whiteChair/modern_chair11obj.mtl'),
-              require('../assets/model3D/whiteChair/0027.JPG'),
-              require('../assets/model3D/whiteChair/unrawpText.JPG'),
+              {
+                uri: `${RNFS.DocumentDirectoryPath}/modern_chair11obj.mtl`,
+              }, // adjust with your correct file path
+              {uri: `${RNFS.DocumentDirectoryPath}/0027.JPG`}, // adjust with your correct file path
+              {uri: `${RNFS.DocumentDirectoryPath}/unrawpText.JPG`}, // adjust with your correct file path
             ]}
             visible={this.state.isReady}
             rotation={this.state.objectRotation}
