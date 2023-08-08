@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, Switch, StyleSheet } from 'react-native';
 import {
   ViroARScene,
   ViroText,
@@ -11,71 +11,30 @@ import {
   ViroARPlaneSelector,
 } from '@viro-community/react-viro';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import HelloWorldSceneAR from './HelloWorldSceneAR';
 import ReticleSceneAR from './ReticleSceneAR';
-import { MeasureSceneAR } from './MeasureSceneAR';
 
-const InitialScene = props => {
-  const [rotation, setRotation] = useState(0);
-  const objectRef = useRef(null);
 
-  function _onRotate(rotateState, rotationFactor, source) {
-    const scale = 0.1;
-    if (rotateState == 2) {
-      setRotation(prevRotation => prevRotation + rotationFactor * scale);
-    }
-  }
-
-  let data = props.sceneNavigator.viroAppProps;
-
-  return (
-    <ViroARScene>
-      <ViroAmbientLight color="#ffffff" />
-
-      {data.flag === true ? (
-        <Viro3DObject
-          source={require('../assets/model3D/whiteChair/modern_chair11obj.obj')}
-          resources={[
-            require('../assets/model3D/whiteChair/modern_chair11obj.mtl'),
-            require('../assets/model3D/whiteChair/0027.JPG'),
-            require('../assets/model3D/whiteChair/unrawpText.JPG'),
-          ]}
-          position={[0, -1, -1]}
-          scale={[0.02, 0.02, 0.02]}
-          type="OBJ"
-          onRotate={_onRotate}
-        // rotation={[0, rotation, 0]}
-        // dragType={'FixedToWorld'}
-
-        // dragType="FixedToPlane"
-        // dragPlane={{
-        //   planePoint: [0, -2, 0],
-        //   planeNormal: [0, 1, 0],
-        //   maxDistance: 4
-        // }}
-        // onDrag={() => { }}
-        />
-      ) : (
-        <ViroText
-          text={'Object is Hidden'}
-          scale={[0.5, 0.5, 0.5]}
-          position={[0, 0, -1]}
-        />
-      )}
-    </ViroARScene>
-  );
-};
+const downloadModelURL = 'https://cmu-sie.oss-us-west-1.aliyuncs.com/threeDModels/5925aee6-e13f-4035-aa82-b675d464d3b2whiteChair.zip';
+const vendorDimensions = {
+  length: 43,
+  width: 42,
+  height: 62,
+}
+console.log("downloadModelURL", downloadModelURL);
 
 function ARScreen({ navigation }) {
   const [flag, setFlag] = useState(false);
+  const [dimensions, setDimensions] = useState(vendorDimensions);
+  const [modelURL, setModelURL] = useState(downloadModelURL)
+
+  const [resizeOn, setResizeOn] = useState(true);
+  const toggleSwitch = () => setResizeOn(previousState => !previousState);
 
   return (
     <View style={styles.container}>
       <ViroARSceneNavigator
         initialScene={{ scene: ReticleSceneAR }}
-        // initialScene={{ scene: InitialScene }}
-        // initialScene={{ scene: MeasureSceneAR }}
-        viroAppProps={{ flag: flag }}
+        viroAppProps={{ flag: flag, modelURL: modelURL, modelDimensions: dimensions, resizeOn: resizeOn }}
         style={{ flex: 1 }}
       />
 
@@ -83,6 +42,13 @@ function ARScreen({ navigation }) {
         <TouchableOpacity onPress={() => setFlag(!flag)}>
           <Text style={{ fontSize: 30 }}>Reposition</Text>
         </TouchableOpacity>
+        <Switch
+          trackColor={{ false: '#767577', true: '#81b0ff' }}
+          thumbColor={resizeOn ? '#f5dd4b' : '#f4f3f4'}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={toggleSwitch}
+          value={!resizeOn}
+        />
       </View>
     </View>
   );
