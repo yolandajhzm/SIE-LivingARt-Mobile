@@ -1,11 +1,13 @@
 'use strict';
-import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
-import { useEffect, useState } from 'react';
+import React, {Component} from 'react';
+import {StyleSheet} from 'react-native';
+import {useEffect, useState} from 'react';
 import {
   ViroARScene,
   ViroText,
   ViroConstants,
+  ViroCamera,
+  ViroFlexView,
   ViroTrackingStateConstants,
   Viro3DObject,
   ViroAmbientLight,
@@ -14,17 +16,16 @@ import {
   ViroImage,
   ViroQuad,
   ViroBox,
-  ViroMaterials
+  ViroMaterials,
 } from '@viro-community/react-viro';
 import RNFS from 'react-native-fs';
-import { unzip } from 'react-native-zip-archive';
+import {unzip} from 'react-native-zip-archive';
 
 ViroMaterials.createMaterials({
   tp: {
     diffuseColor: 'hsla(0, 50%, 50%, 0.25)',
   },
 });
-
 
 class ReticleSceneAR extends Component {
   constructor(props) {
@@ -52,7 +53,7 @@ class ReticleSceneAR extends Component {
       modelResources: [],
       modelUrl:
         'https://cmu-sie.oss-us-west-1.aliyuncs.com/threeDModels/5925aee6-e13f-4035-aa82-b675d464d3b2whiteChair.zip',
-    }
+    };
 
     // console.log('!!flag:', this.state.flag);
 
@@ -67,19 +68,22 @@ class ReticleSceneAR extends Component {
     this._onClickObject = this._onClickObject.bind(this);
     this._onPinchObject = this._onPinchObject.bind(this);
 
-    this.fetchAndUnzip = this.fetchAndUnzip.bind(this);
-  };
+    this._fetchAndUnzip = this._fetchAndUnzip.bind(this);
 
-  async componentDidMount() {
-    await this.fetchAndUnzip(this.state.modelUrl);
+    this._onRotateLeft = this._onRotateLeft.bind(this);
+    this._onRotateRight = this._onRotateRight.bind(this);
   }
 
-  async fetchAndUnzip(fromUrl) {
+  async componentDidMount() {
+    await this._fetchAndUnzip(this.state.modelUrl);
+  }
+
+  async _fetchAndUnzip(fromUrl) {
     const zipFilePath = `${RNFS.DocumentDirectoryPath}/model.zip`; // path where the downloaded zip file should be stored
     const targetPath = `${RNFS.DocumentDirectoryPath}/model`; // path where the unzipped files should be stored
 
     try {
-      const { jobId, promise } = RNFS.downloadFile({
+      const {jobId, promise} = RNFS.downloadFile({
         fromUrl: fromUrl, // use the argument as the URL
         toFile: zipFilePath,
       });
@@ -104,14 +108,14 @@ class ReticleSceneAR extends Component {
         if (file.name.endsWith('.obj')) {
           objFile = file.path;
         } else {
-          resources.push({ uri: file.path });
+          resources.push({uri: file.path});
         }
       });
 
       // Update the state with the found files
       if (objFile) {
         this.setState({
-          modelSource: { uri: objFile },
+          modelSource: {uri: objFile},
           modelResources: resources,
         });
       } else {
@@ -121,8 +125,6 @@ class ReticleSceneAR extends Component {
       console.error(err);
     }
   }
-
-
 
   componentWillReceiveProps = props => {
     this.setState({
@@ -145,6 +147,46 @@ class ReticleSceneAR extends Component {
           castsShadow={true}
           shadowOpacity={0.9}
         />
+        <ViroCamera active={true}>
+          {/*<ViroFlexView*/}
+          {/*  transformBehaviors={'billboard'}*/}
+          {/*  position={[0, -2, -1]}*/}
+          {/*  style={{*/}
+          {/*    flexDirection: 'row',*/}
+          {/*    padding: 0,*/}
+          {/*    // alignItems: 'center',*/}
+          {/*    // justifyContent: 'center',*/}
+          {/*  }}*/}
+          {/*  width={3}*/}
+          {/*  height={1}>*/}
+          {/*  <ViroImage*/}
+          {/*    source={require('../assets/res/noun-rotate-3697381.png')}*/}
+          {/*    style={{flex: 0.5}}*/}
+          {/*    scale={[0.3, 0.3, 0.3]}*/}
+          {/*    onClick={this._onRotateLeft}*/}
+          {/*  />*/}
+          {/*  <ViroImage*/}
+          {/*    source={require('../assets/res/noun-rotate-3697381-flipped.png')}*/}
+          {/*    style={{flex: 0.5}}*/}
+          {/*    scale={[0.3, 0.3, 0.3]}*/}
+          {/*    onClick={this._onRotateRight}*/}
+          {/*  />*/}
+          {/*</ViroFlexView>*/}
+
+          <ViroImage
+            position={[-1, -1, -3]}
+            source={require('../assets/res/noun-rotate-3697381.png')}
+            scale={[1, 1, 1]}
+            onClick={this._onRotateLeft}
+          />
+          <ViroImage
+            position={[1, -1, -3]}
+            source={require('../assets/res/noun-rotate-3697381-flipped.png')}
+            scale={[1, 1, 1]}
+            onClick={this._onRotateRight}
+          />
+          {/*<ViroBox position={[0, 0, -5]}></ViroBox>*/}
+        </ViroCamera>
         <ViroText
           text={this.state.text}
           scale={[0.5, 0.5, 0.5]}
@@ -245,17 +287,20 @@ class ReticleSceneAR extends Component {
     var transformBehaviors = this.state.shouldBillboard ? 'billboardY' : [];
 
     return (
-
       <ViroNode
         position={position}
         // rotation={this.state.modelWorldRotation}
         rotation={this.state.objectRotation}
         scale={this.state.objectScale}
         onPinch={this._onPinchObject}
-      // transformBehaviors={transformBehaviors}
+        // transformBehaviors={transformBehaviors}
       >
         <ViroText
-          position={[0, this.state.boundingBox.height / this.state.objectScale[0] / 2, - this.state.boundingBox.length / 2 / this.state.objectScale[0]]}
+          position={[
+            0,
+            this.state.boundingBox.height / this.state.objectScale[0] / 2,
+            -this.state.boundingBox.length / 2 / this.state.objectScale[0],
+          ]}
           rotation={[0, 0, 0]}
           transformBehaviors={'billboardY'}
           visible={this.state.isReady}
@@ -264,13 +309,17 @@ class ReticleSceneAR extends Component {
           width={2}
           height={1.8}
           style={{
-            fontFamily: "Arial",
+            fontFamily: 'Arial',
             fontSize: 8,
             fontWeight: '1000',
-            fontStyle: "italic",
-            color: "#EE4B2B",
+            fontStyle: 'italic',
+            color: '#EE4B2B',
           }}
-          text={`Width: ${Math.round(this.state.boundingBox.width * 100)}cm,\n Height: ${Math.round(this.state.boundingBox.height * 100)}cm,\n Length: ${Math.round(this.state.boundingBox.length * 100)}cm`}
+          text={`Width: ${Math.round(
+            this.state.boundingBox.width * 100,
+          )}cm,\n Height: ${Math.round(
+            this.state.boundingBox.height * 100,
+          )}cm,\n Length: ${Math.round(this.state.boundingBox.length * 100)}cm`}
         />
         {/* <ViroText
           position={[this.state.boundingBox.width / 2 / this.state.objectScale[0], this.state.boundingBox.height / this.state.objectScale[0] + 0.4, 0]}
@@ -287,7 +336,7 @@ class ReticleSceneAR extends Component {
             this.node = ref;
             // console.log("this.node", this.node)
           }}
-        // scale={[.1, .1, .1]}
+          // scale={[.1, .1, .1]}
         >
           {/* <Viro3DObject
             visible={this.state.isReady}
@@ -324,7 +373,7 @@ class ReticleSceneAR extends Component {
             visible={this.state.isReady}
             rotation={this.state.objectRotation}
             onClickState={this._onClickObject}
-            onRotate={this._onRotateObject}
+            // onRotate={this._onRotateObject}
             onPinch={this._onPinchObject}
             scale={[0.01, 0.01, 0.01]}
             type="OBJ"
@@ -337,7 +386,7 @@ class ReticleSceneAR extends Component {
             arShadowReceiver={true}
             ignoreEventHandling={true} /> */}
         </ViroNode>
-      </ViroNode >
+      </ViroNode>
     );
   }
 
@@ -351,7 +400,7 @@ class ReticleSceneAR extends Component {
       console.log('Click Up', stateValue, position, source);
     } else if (stateValue == 3) {
       console.log('Clicked', stateValue, position, source);
-      console.log("!!File downloaded!!")
+      console.log('!!File downloaded!!');
       this._updateObjectDimension();
       // console.log("state.rotation", this.state.objectRotation);
       // this.state.boundingBox.height = d.maxY - d.minY;
@@ -361,32 +410,37 @@ class ReticleSceneAR extends Component {
   _updateObjectDimension() {
     // console.log(this.node);
     let dx, dy, dz;
-    this.node.getBoundingBoxAsync().then((data) => {
-      // console.log(data);
-      dx = data.boundingBox.maxX - data.boundingBox.minX;
-      dy = data.boundingBox.maxY - data.boundingBox.minY;
-      dz = data.boundingBox.maxZ - data.boundingBox.minZ;
-      console.log("dx:", dx);
-      console.log("dy:", dy);
-      console.log("dz:", dz);
-      console.log("minY:", data.boundingBox.minY);
-    }).then(this.node.getTransformAsync().then((transform) => {
-      console.log("pos:", transform.position);
-      console.log("scale:", transform.scale);
-      console.log("rotation:", transform.rotation);
-      let a = transform.rotation[1];
-      let c = Math.abs(Math.cos(2 * a / 180.0 * Math.PI));
-      let s = Math.abs(Math.sin(2 * a / 180.0 * Math.PI));
-      console.log("cal ", c)
-      this.setState({
-        boundingBox: {
-          width: (c * dx - s * dz) / (c * c - s * s),
-          length: (c * dz - s * dx) / (c * c - s * s),
-          height: dy,
-        }
+    this.node
+      .getBoundingBoxAsync()
+      .then(data => {
+        // console.log(data);
+        dx = data.boundingBox.maxX - data.boundingBox.minX;
+        dy = data.boundingBox.maxY - data.boundingBox.minY;
+        dz = data.boundingBox.maxZ - data.boundingBox.minZ;
+        console.log('dx:', dx);
+        console.log('dy:', dy);
+        console.log('dz:', dz);
+        console.log('minY:', data.boundingBox.minY);
       })
-      console.log("bB.width:", this.state.boundingBox.width);
-    }))
+      .then(
+        this.node.getTransformAsync().then(transform => {
+          console.log('pos:', transform.position);
+          console.log('scale:', transform.scale);
+          console.log('rotation:', transform.rotation);
+          let a = transform.rotation[1];
+          let c = Math.abs(Math.cos(((2 * a) / 180.0) * Math.PI));
+          let s = Math.abs(Math.sin(((2 * a) / 180.0) * Math.PI));
+          console.log('cal ', c);
+          this.setState({
+            boundingBox: {
+              width: (c * dx - s * dz) / (c * c - s * s),
+              length: (c * dz - s * dx) / (c * c - s * s),
+              height: dy,
+            },
+          });
+          console.log('bB.width:', this.state.boundingBox.width);
+        }),
+      );
   }
 
   _onRotateObject(rotateState, rotationFactor, source) {
@@ -402,9 +456,25 @@ class ReticleSceneAR extends Component {
     }
   }
 
+  _onRotateLeft() {
+    if (this.state.isReady) {
+      this.setState({
+        objectRotation: [0, this.state.objectRotation[1] - 18, 0],
+      });
+    }
+  }
+
+  _onRotateRight() {
+    if (this.state.isReady) {
+      this.setState({
+        objectRotation: [0, this.state.objectRotation[1] + 18, 0],
+      });
+    }
+  }
+
   _onPinchObject(pinchState, scaleFactor, source) {
     if (pinchState == 3) {
-      console.log("onPinch:", scaleFactor);
+      console.log('onPinch:', scaleFactor);
       const SCALE = 0.5;
       const myPromise = new Promise((resolve, reject) => {
         this.setState({
@@ -412,10 +482,10 @@ class ReticleSceneAR extends Component {
             this.state.objectScale[0] * scaleFactor,
             this.state.objectScale[1] * scaleFactor,
             this.state.objectScale[2] * scaleFactor,
-          ]
-        })
+          ],
+        });
         resolve();
-        console.log("onPinch: setScale");
+        console.log('onPinch: setScale');
       });
       // myPromise.then((value) => {
       //   // console.log("onPinch Resolve: ", value);
@@ -426,14 +496,13 @@ class ReticleSceneAR extends Component {
           width: this.state.boundingBox.width * scaleFactor,
           length: this.state.boundingBox.length * scaleFactor,
           height: this.state.boundingBox.height * scaleFactor,
-        }
-      })
+        },
+      });
       // update scale of obj by multiplying by scaleFactor when pinch ends.
-      console.log("onPinch: updateScale");
+      console.log('onPinch: updateScale');
     }
-    //set scale using native props to reflect pinch.  
+    //set scale using native props to reflect pinch.
   }
-
 
   _onTrackingUpdated(state, reason) {
     if (state == ViroTrackingStateConstants.TRACKING_NORMAL) {
@@ -494,6 +563,5 @@ let styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
 
 export default ReticleSceneAR;
