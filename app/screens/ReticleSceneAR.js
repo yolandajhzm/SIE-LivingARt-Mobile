@@ -365,14 +365,14 @@ class ReticleSceneAR extends Component {
         >
           <Viro3DObject
             // source={require('../assets/model3D/RoundSofa/Sofa.obj')}
-            source={require('../assets/model3D/table/table.obj')}
+            // source={require('../assets/model3D/table/table.obj')}
             // resources={[
             //   require('../assets/model3D/whiteChair/modern_chair11obj.mtl'),
             //   require('../assets/model3D/whiteChair/0027.JPG'),
             //   require('../assets/model3D/whiteChair/unrawpText.JPG'),
             // ]}
-            // source={this.state.modelSource}
-            // resources={this.state.modelResources}
+            source={this.state.modelSource}
+            resources={this.state.modelResources}
             visible={this.state.isReady}
             rotation={this.state.objectRotation}
             onClickState={this._onClickObject}
@@ -604,7 +604,7 @@ let styles = StyleSheet.create({
     color: '#EE4B2B',
     textAlignVertical: 'center',
     textAlign: 'left',
-    width: 2,
+    // width: 2,
     // height: 2,
   },
 });

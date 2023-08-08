@@ -9,7 +9,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd -s 12 12 12 C:/Users/15472/OneDrive/文档/TexturesCom_Carpet0012_1_seamless_S.jpg
+map_Kd ROUNDSOFA.jpg
 
 newmtl Material.001
 Ns 250.000000

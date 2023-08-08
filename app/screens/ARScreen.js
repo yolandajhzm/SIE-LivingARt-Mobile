@@ -35,20 +35,21 @@ function ARScreen({ navigation }) {
       <ViroARSceneNavigator
         initialScene={{ scene: ReticleSceneAR }}
         viroAppProps={{ flag: flag, modelURL: modelURL, modelDimensions: dimensions, resizeOn: resizeOn }}
-        style={{ flex: 1 }}
+        style={styles.arView}
       />
 
       <View style={styles.controlsView}>
-        <TouchableOpacity onPress={() => setFlag(!flag)}>
+        <TouchableOpacity style={styles.reposBtn} onPress={() => setFlag(!flag)}>
           <Text style={{ fontSize: 30 }}>Reposition</Text>
         </TouchableOpacity>
-        <Switch
+        <Switch style={styles.toggleSwitch}
           trackColor={{ false: '#767577', true: '#81b0ff' }}
           thumbColor={resizeOn ? '#f5dd4b' : '#f4f3f4'}
           ios_backgroundColor="#3e3e3e"
           onValueChange={toggleSwitch}
           value={!resizeOn}
         />
+        <Text style={styles.txtStyle}> Resize: </Text>
       </View>
     </View>
   );
@@ -59,14 +60,29 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#000000',
   },
+  arView: {
+    position: 'relative',
+  },
   controlsView: {
+    position: 'absolute',
+    bottom: 0,
     width: '100%',
-    height: 100,
-    backgroundColor: '#ffffff',
+    height: 80,
+    backgroundColor: 'rgba(52, 52, 52, 0.35)',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  toggleSwitch: {
+    margin: 8,
+  },
+  reposBtn: {
+    fontSize: 30,
+    margin: 8,
+  },
+  txtStyle: {
+    fontSize: 30
+  }
 });
 
 export default ARScreen;
