@@ -1,7 +1,7 @@
 'use strict';
-import React, {Component} from 'react';
-import {StyleSheet} from 'react-native';
-import {useEffect, useState} from 'react';
+import React, { Component } from 'react';
+import { StyleSheet } from 'react-native';
+import { useEffect, useState } from 'react';
 import {
   ViroARScene,
   ViroText,
@@ -19,7 +19,7 @@ import {
   ViroMaterials,
 } from '@viro-community/react-viro';
 import RNFS from 'react-native-fs';
-import {unzip} from 'react-native-zip-archive';
+import { unzip } from 'react-native-zip-archive';
 
 ViroMaterials.createMaterials({
   tp: {
@@ -109,7 +109,7 @@ class ReticleSceneAR extends Component {
       console.log('after find zipFilePath exist', zipFileExist, zipFilePath);
       console.log('after find targetPath exist', targetPathExist, targetPath);
       if (true) {
-        const {jobId, promise} = RNFS.downloadFile({
+        const { jobId, promise } = RNFS.downloadFile({
           fromUrl: fromUrl, // use the argument as the URL
           toFile: zipFilePath,
         });
@@ -135,14 +135,14 @@ class ReticleSceneAR extends Component {
         if (file.name.endsWith('.obj')) {
           objFile = file.path;
         } else {
-          resources.push({uri: file.path});
+          resources.push({ uri: file.path });
         }
       });
 
       // Update the state with the found files
       if (objFile) {
         this.setState({
-          modelSource: {uri: objFile},
+          modelSource: { uri: objFile },
           modelResources: resources,
         });
       } else {
@@ -187,6 +187,8 @@ class ReticleSceneAR extends Component {
   }
 
   render() {
+    let position = [...this.state.lastFoundPlaneLocation];
+    position[1] += this.state.boundingBox.height;
     return (
       <ViroARScene
         onCameraARHitTest={this._onCameraARHitTest}
@@ -199,46 +201,6 @@ class ReticleSceneAR extends Component {
           castsShadow={true}
           shadowOpacity={0.9}
         />
-        <ViroCamera active={true}>
-          {/*<ViroFlexView*/}
-          {/*  transformBehaviors={'billboard'}*/}
-          {/*  position={[0, -2, -1]}*/}
-          {/*  style={{*/}
-          {/*    flexDirection: 'row',*/}
-          {/*    padding: 0,*/}
-          {/*    // alignItems: 'center',*/}
-          {/*    // justifyContent: 'center',*/}
-          {/*  }}*/}
-          {/*  width={3}*/}
-          {/*  height={1}>*/}
-          {/*  <ViroImage*/}
-          {/*    source={require('../assets/res/noun-rotate-3697381.png')}*/}
-          {/*    style={{flex: 0.5}}*/}
-          {/*    scale={[0.3, 0.3, 0.3]}*/}
-          {/*    onClick={this._onRotateLeft}*/}
-          {/*  />*/}
-          {/*  <ViroImage*/}
-          {/*    source={require('../assets/res/noun-rotate-3697381-flipped.png')}*/}
-          {/*    style={{flex: 0.5}}*/}
-          {/*    scale={[0.3, 0.3, 0.3]}*/}
-          {/*    onClick={this._onRotateRight}*/}
-          {/*  />*/}
-          {/*</ViroFlexView>*/}
-
-          <ViroImage
-            position={[-1, -1, -3]}
-            source={require('../assets/res/noun-rotate-3697381.png')}
-            scale={[1, 1, 1]}
-            onClick={this._onRotateLeft}
-          />
-          <ViroImage
-            position={[1, -1, -3]}
-            source={require('../assets/res/noun-rotate-3697381-flipped.png')}
-            scale={[1, 1, 1]}
-            onClick={this._onRotateRight}
-          />
-          {/*<ViroBox position={[0, 0, -5]}></ViroBox>*/}
-        </ViroCamera>
         <ViroText
           text={this.state.text}
           scale={[0.5, 0.5, 0.5]}
@@ -249,6 +211,7 @@ class ReticleSceneAR extends Component {
         {this.state.modelSource
           ? this._getModel()
           : console.log('Not Yet', this.state.modelSource)}
+        {this._getModelDimensionText()}
       </ViroARScene>
     );
   }
@@ -332,6 +295,26 @@ class ReticleSceneAR extends Component {
     }
   }
 
+  _getModelDimensionText() {
+    // console.log("flag:", this.props.sceneNavigator.viroAppProps.flag);
+    let position = [...this.state.lastFoundPlaneLocation];
+    position[1] += this.state.boundingBox.height * 1.2;
+
+    let height = this.state.boundingBox.height
+    let width = this.state.boundingBox.height / this.state.modelDimensions.height * this.state.modelDimensions.width;
+    let length = this.state.boundingBox.height / this.state.modelDimensions.height * this.state.modelDimensions.length;
+    return (
+      <ViroText
+        text={`H: ${Math.round(height * 100)}cm \n W: ${Math.round(width * 100)}cm \n L: ${Math.round(length * 100)}cm`}
+        visible={this.state.isReady && this.state.resizeOn}
+        scale={[0.5, 0.5, 0.5]}
+        position={position}
+        transformBehaviors={'billboardY'}
+        style={styles.dimensionTextStyle}
+      />
+    );
+  }
+
   _getModel() {
     // console.log("flag:", this.props.sceneNavigator.viroAppProps.flag);
     // if (!this.state.isReady) return;
@@ -347,24 +330,20 @@ class ReticleSceneAR extends Component {
       <ViroNode
         position={position}
         // rotation={this.state.modelWorldRotation}
-        rotation={this.state.objectRotation}
+        // rotation={this.state.objectRotation}
         scale={this.state.objectScale}
-        onPinch={this._onPinchObject}
-        // transformBehaviors={transformBehaviors}
+      // onPinch={this._onPinchObject}
+      // transformBehaviors={transformBehaviors}
       >
-        <ViroText
-          position={[
-            0,
-            this.state.boundingBox.height / this.state.objectScale[0] / 2,
-            -this.state.boundingBox.length / 2 / this.state.objectScale[0],
-          ]}
+        {/* <ViroText
+          position={[0, 2, 0]}
           rotation={[0, 0, 0]}
           transformBehaviors={'billboardY'}
           visible={this.state.isReady && this.state.resizeOn}
           // rotation={this.state.objectRotation}
           textAlign="center"
           width={2}
-          height={1.8}
+          height={1.5}
           style={{
             fontFamily: 'Arial',
             fontSize: 8,
@@ -377,71 +356,31 @@ class ReticleSceneAR extends Component {
           )}cm,\n Height: ${Math.round(
             this.state.boundingBox.height * 100,
           )}cm,\n Length: ${Math.round(this.state.boundingBox.length * 100)}cm`}
-        />
-        {/* <ViroText
-          position={[this.state.boundingBox.width / 2 / this.state.objectScale[0], this.state.boundingBox.height / this.state.objectScale[0] + 0.4, 0]}
-          rotation={[0, -90, 0]}
-          transformBehaviors={'billboardY'}
-          visible={this.state.isReady}
-          // rotation={this.state.objectRotation}
-          textAlign="center"
-          text={`Height: ${Math.round(this.state.boundingBox.height * 100)}cm, Length: ${Math.round(this.state.boundingBox.length * 100)}cm`}
         /> */}
 
         <ViroNode
           ref={ref => {
             this.node = ref;
-            // console.log("this.node", this.node)
           }}
-          // scale={[.1, .1, .1]}
         >
-          {/* <Viro3DObject
-            visible={this.state.isReady}
-            position={[0, .5, 0]}
-            source={require('./res/emoji_heart_anim/emoji_heart_anim.vrx')}
-            resources={[
-              require('./res/emoji_heart_anim/emoji_heart.png'),
-              require('./res/emoji_heart_anim/emoji_heart_specular.png'),
-            ]}
-            animation={{ name: "02", delay: 0, loop: true, run: true }}
-            type="VRX" /> */}
-
-          {/* <ViroBox
-            visible={this.state.isReady}
-            position={[0, 1.55, 0]}
-            height={this.state.boundingBox.height / this.state.objectScale[0]}
-            length={this.state.boundingBox.length / this.state.objectScale[0]}
-            width={this.state.boundingBox.width / this.state.objectScale[0]}
-            materials={'tp'}
-            rotation={this.state.objectRotation}
-            onClickState={this._onClickObject}
-            onRotate={this._onRotateObject}
-          >
-          </ViroBox> */}
           <Viro3DObject
-            // source={require('../assets/model3D/whiteChair/modern_chair11obj.obj')}
+            // source={require('../assets/model3D/RoundSofa/Sofa.obj')}
+            source={require('../assets/model3D/table/table.obj')}
             // resources={[
             //   require('../assets/model3D/whiteChair/modern_chair11obj.mtl'),
             //   require('../assets/model3D/whiteChair/0027.JPG'),
             //   require('../assets/model3D/whiteChair/unrawpText.JPG'),
             // ]}
-            source={this.state.modelSource}
-            resources={this.state.modelResources}
+            // source={this.state.modelSource}
+            // resources={this.state.modelResources}
             visible={this.state.isReady}
             rotation={this.state.objectRotation}
             onClickState={this._onClickObject}
-            // onRotate={this._onRotateObject}
+            onRotate={this._onRotateObject}
             onPinch={this._onPinchObject}
-            scale={[0.01, 0.01, 0.01]}
+            // scale={[0.01, 0.01, 0.01]}
             type="OBJ"
           />
-          {/* <ViroQuad
-            rotation={[-90, 0, 0]}
-            position={[0, -.001, 0]}
-            width={8}
-            height={8}
-            arShadowReceiver={true}
-            ignoreEventHandling={true} /> */}
         </ViroNode>
       </ViroNode>
     );
@@ -659,6 +598,16 @@ let styles = StyleSheet.create({
     textAlignVertical: 'center',
     textAlign: 'center',
   },
+  dimensionTextStyle: {
+    fontFamily: 'Arial',
+    fontSize: 13,
+    color: '#EE4B2B',
+    textAlignVertical: 'center',
+    textAlign: 'left',
+    width: 2,
+    // height: 2,
+  },
 });
+
 
 export default ReticleSceneAR;

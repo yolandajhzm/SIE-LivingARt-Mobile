@@ -492,7 +492,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = KMXA6MWHL3;
+				DEVELOPMENT_TEAM = 23R6XP4852;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = LivingARt/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -505,7 +505,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.happyCompany.LivingARt.new-ui";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.happyCompanyABC.LivingARt.new-ui";
 				PRODUCT_NAME = LivingARt;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -523,7 +523,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = KMXA6MWHL3;
+				DEVELOPMENT_TEAM = 23R6XP4852;
 				INFOPLIST_FILE = LivingARt/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -535,7 +535,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.happyCompany.LivingARt.new-ui";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.happyCompanyABC.LivingARt.new-ui";
 				PRODUCT_NAME = LivingARt;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
