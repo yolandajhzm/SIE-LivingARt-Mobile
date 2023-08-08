@@ -1,15 +1,17 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import {View, Text} from 'react-native';
 
-function ARScreen({ route, navigation }) {
-  const models  = route.params.threeModels;
-  console.log(models)
-    return (
-        <View>
-            <Text>AR Screen</Text>
-        </View>
-    );}
-    export default ARScreen;
+function ARScreen({route, navigation}) {
+  const modelURL = route.params.model;
+  const dimension = route.params.dimension;
+  console.log(dimension);
+  return (
+    <View>
+      <Text>AR Screen</Text>
+    </View>
+  );
+}
+export default ARScreen;
 
 // import React, {useState, useRef, useEffect} from 'react';
 // import {View, Text, StyleSheet} from 'react-native';
