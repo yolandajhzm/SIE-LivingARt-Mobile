@@ -53,10 +53,6 @@ class ReticleSceneAR extends Component {
       modelURL: this.props.sceneNavigator.viroAppProps.modelURL,
       modelSource: null,
       modelResources: [],
-
-      modelUrl:
-        'https://cmu-sie.oss-us-west-1.aliyuncs.com/threeDModels/5925aee6-e13f-4035-aa82-b675d464d3b2whiteChair.zip',
-
       resizeOn: false,
     };
 
@@ -82,7 +78,7 @@ class ReticleSceneAR extends Component {
 
   async componentDidMount() {
     console.log('before fetchAndUnzip', this.state.modelURL);
-    await this._fetchAndUnzip(this.state.modelUrl);
+    await this._fetchAndUnzip(this.state.modelURL);
   }
 
   async componentWillUnmount() {
@@ -104,7 +100,7 @@ class ReticleSceneAR extends Component {
     const targetPath = `${RNFS.DocumentDirectoryPath}/model`; // path where the unzipped files should be stored
     console.log('after set FilePath', zipFilePath);
     try {
-      const zipFileExist = await RNFS.exists(zipFilePath);
+      let zipFileExist = await RNFS.exists(zipFilePath);
       const targetPathExist = await RNFS.exists(targetPath);
       console.log('after find zipFilePath exist', zipFileExist, zipFilePath);
       console.log('after find targetPath exist', targetPathExist, targetPath);
@@ -116,7 +112,9 @@ class ReticleSceneAR extends Component {
 
         await promise; // wait for the file to finish downloading
         console.log(`download completed at ${zipFilePath}`);
-
+        zipFileExist = await RNFS.exists(zipFilePath);
+        console.log("fromUrl: ", fromUrl);
+        console.log("downloaded zipFileExist", zipFileExist);
         await unzip(zipFilePath, targetPath); // unzip the downloaded file
         console.log(`unzip completed at ${targetPath}`);
       }
@@ -500,15 +498,18 @@ class ReticleSceneAR extends Component {
   }
 
   _onRotateObject(rotateState, rotationFactor, source) {
-    const SCALE = 0.1;
-    if (rotateState == 2) {
-      this.setState({
-        objectRotation: [
-          0,
-          this.state.objectRotation[1] + rotationFactor * SCALE,
-          0,
-        ],
-      });
+
+    const SCALE = 0.075;
+    if (!this.state.resizeOn) {
+      if (rotateState == 2) {
+        this.setState({
+          objectRotation: [
+            0,
+            this.state.objectRotation[1] + rotationFactor * SCALE,
+            0,
+          ],
+        });
+      }
     }
   }
 
@@ -601,7 +602,7 @@ let styles = StyleSheet.create({
   dimensionTextStyle: {
     fontFamily: 'Arial',
     fontSize: 13,
-    color: '#EE4B2B',
+    color: '#39FF14',
     textAlignVertical: 'center',
     textAlign: 'left',
     // width: 2,
