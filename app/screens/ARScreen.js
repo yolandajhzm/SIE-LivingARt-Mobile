@@ -40,16 +40,19 @@ function ARScreen({ navigation }) {
 
       <View style={styles.controlsView}>
         <TouchableOpacity style={styles.reposBtn} onPress={() => setFlag(!flag)}>
-          <Text style={{ fontSize: 30 }}>Reposition</Text>
+          <Text style={styles.txtStyle}>Replace</Text>
         </TouchableOpacity>
-        <Switch style={styles.toggleSwitch}
-          trackColor={{ false: '#767577', true: '#81b0ff' }}
-          thumbColor={resizeOn ? '#f5dd4b' : '#f4f3f4'}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleSwitch}
-          value={!resizeOn}
-        />
-        <Text style={styles.txtStyle}> Resize: </Text>
+        <TouchableOpacity style={styles.resizeBtn}>
+          <Text style={styles.txtStyle}> Resize </Text>
+          <Switch style={styles.toggleSwitch}
+            trackColor={{ false: '#cccccc', true: '#74b72E' }}
+            thumbColor={resizeOn ? '#cccccc' : '#cccccc'}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitch}
+            value={!resizeOn}
+          />
+
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -72,16 +75,38 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    padding: 8,
   },
   toggleSwitch: {
-    margin: 8,
+    // margin: 8,
   },
   reposBtn: {
-    fontSize: 30,
-    margin: 8,
+    borderWidth: 2,
+    borderColor: 'rgba(0,0,0,0.6)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 110,
+    height: 50,
+    borderRadius: 10,
+    marginLeft: 25,
+  },
+
+  resizeBtn: {
+    flexDirection: 'row',
+    borderWidth: 2,
+    borderColor: 'rgba(0,0,0,0.6)',
+    // alignItems: 'center',
+    justifyContent: 'center',
+    width: 150,
+    height: 50,
+    borderRadius: 10,
+    padding: 8,
+    marginRight: 25,
   },
   txtStyle: {
-    fontSize: 30
+    fontWeight: '450',
+    font: "SF Pro",
+    fontSize: 22
   }
 });
 

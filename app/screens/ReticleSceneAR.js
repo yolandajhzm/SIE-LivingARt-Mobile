@@ -601,7 +601,7 @@ let styles = StyleSheet.create({
   dimensionTextStyle: {
     fontFamily: 'Arial',
     fontSize: 13,
-    color: '#EE4B2B',
+    color: '#37FD12',
     textAlignVertical: 'center',
     textAlign: 'left',
     // width: 2,
