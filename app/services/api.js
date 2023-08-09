@@ -7,13 +7,14 @@ export const callApi = async (url, method = 'GET', data = null) => {
         },
         body: data ? JSON.stringify(data) : null,
       });
-  
-      if (response.ok) {
-        const responseData = await response.json();
-        return responseData;
-      } else {
-        throw new Error('API request failed');
-      }
+      
+      
+      // if (response.ok) {
+      const responseData = await response.json();
+      return responseData;
+      // } else {
+      //   throw new Error('API request failed');
+      // }
     } catch (error) {
       throw new Error('API request failed');
     }

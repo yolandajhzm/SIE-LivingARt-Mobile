@@ -5,6 +5,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 
 import colors from '../config/colors';
 import { callApi } from '../services/api';
+import APIConfig from '../config/APIConfig';
 
 // TODO: 
 // JWT?
@@ -13,8 +14,8 @@ function LoginScreen ({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-  
-    const handleLogin = () => {
+    
+    const handleLogin = async() => {
         if (!email) {
             alert('Please fill Email');
             return;
@@ -24,14 +25,25 @@ function LoginScreen ({ navigation }) {
             return;
         }
         // login user
-        // const responseData = callApi('API_URL', 'PUT', { email, password })
+        const responseData = await callApi(APIConfig.LOGIN_USER, 'PUT', { 
+            email: email,
+            password: password,
+        })
 
-        // TODO: handle response
-        if (true) {
-            navigation.navigate('Home');
-        } else {
-            alert('Login failed');
-        }
+        // handle response
+        setEmail('');
+        setPassword('');
+        setTimeout(() => {
+            if (responseData.code === 0) { 
+                const userId = responseData.data.id; 
+                console.log("id: " + userId);
+                navigation.navigate('Home', { userId });
+            } else {
+                alert(responseData.msg);
+                console.error("Login failed");
+            }
+        }, 1);
+        // navigation.navigate('Home', { userId });
     };
 
     const handleSignUp = () => {

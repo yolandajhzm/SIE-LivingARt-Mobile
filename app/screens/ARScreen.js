@@ -13,19 +13,22 @@ import {
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import ReticleSceneAR from './ReticleSceneAR';
 
+// const downloadModelURL =
+//   'https://cmu-sie.oss-us-west-1.aliyuncs.com/threeDModels/5925aee6-e13f-4035-aa82-b675d464d3b2whiteChair.zip';
+// const vendorDimensions = {
+//   length: 43,
+//   width: 42,
+//   height: 62,
+// };
 
-const downloadModelURL = 'https://cmu-sie.oss-us-west-1.aliyuncs.com/threeDModels/5925aee6-e13f-4035-aa82-b675d464d3b2whiteChair.zip';
-const vendorDimensions = {
-  length: 43,
-  width: 42,
-  height: 62,
-}
-console.log("downloadModelURL", downloadModelURL);
+// console.log('downloadModelURL', downloadModelURL);
 
-function ARScreen({ navigation }) {
+function ARScreen({ route, navigation }) {
+  const downloadModelURL = route.params.model;
+  const vendorDimensions = route.params.dimension;
   const [flag, setFlag] = useState(false);
   const [dimensions, setDimensions] = useState(vendorDimensions);
-  const [modelURL, setModelURL] = useState(downloadModelURL)
+  const [modelURL, setModelURL] = useState(downloadModelURL);
 
   const [resizeOn, setResizeOn] = useState(true);
   const toggleSwitch = () => setResizeOn(previousState => !previousState);
@@ -49,7 +52,7 @@ function ARScreen({ navigation }) {
           onValueChange={toggleSwitch}
           value={!resizeOn}
         />
-        <Text style={styles.txtStyle}> Resize: </Text>
+        <Text style={styles.txtStyle}> Resize </Text>
       </View>
     </View>
   );

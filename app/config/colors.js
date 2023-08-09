@@ -5,5 +5,6 @@ export default {
     background: '#f7f7f7',
     white: "#fff",
     black: "#000",
-    blue: "#5aaeff"
+    blue: "#5aaeff",
+    red: "#fc0303",
 }
